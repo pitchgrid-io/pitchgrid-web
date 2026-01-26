@@ -1,173 +1,612 @@
-<script lang="ts">
-    import Logo from "$lib/components/_Logo.svelte";
-    import LogoWithCaption from "$lib/components/_LogoWithCaption.svelte";
-
-</script>
-
 <style>
-    :global(body) {
-        background-color: #F0F0F0;
-        color: black;
-    }
-    :global(.container) {
-        margin: 10px;
-    }
+	/* Hero Section */
+	.hero {
+		background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1419 100%);
+		padding: 6rem 0 4rem;
+		text-align: center;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.hero::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: url('/docs/images/PitchGrid-Basic-CMajor.png') center/contain no-repeat;
+		opacity: 0.1;
+		z-index: 1;
+	}
+
+	.hero-content {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 2rem;
+		position: relative;
+		z-index: 2;
+	}
+
+	.hero h1 {
+		font-size: 3.5rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+		color: #ffffff;
+		line-height: 1.2;
+	}
+
+	.hero-tagline {
+		font-size: 1.25rem;
+		color: #f0a500;
+		margin-bottom: 2rem;
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.hero-description {
+		font-size: 1.1rem;
+		color: #b0b0b0;
+		margin-bottom: 3rem;
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.hero-cta {
+		display: inline-block;
+		background: linear-gradient(135deg, #f0a500, #ffc640);
+		color: #1a1a2e;
+		padding: 1rem 2rem;
+		border-radius: 50px;
+		font-weight: 600;
+		font-size: 1.1rem;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 15px rgba(240, 165, 0, 0.3);
+	}
+
+	.hero-cta:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 25px rgba(240, 165, 0, 0.4);
+		color: #1a1a2e;
+	}
+
+	/* Container */
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 2rem;
+	}
+
+	.section {
+		padding: 4rem 0;
+	}
+
+	.section h2 {
+		font-size: 2.5rem;
+		color: #ffffff;
+		text-align: center;
+		margin-bottom: 3rem;
+		font-weight: 600;
+	}
+
+	/* Feature Cards */
+	.features-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 2rem;
+		margin: 2rem 0;
+	}
+
+	.feature-card {
+		background: linear-gradient(135deg, #2a2a4e 0%, #1f1f3a 100%);
+		border: 1px solid rgba(240, 165, 0, 0.2);
+		border-radius: 12px;
+		padding: 2rem;
+		text-align: center;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	}
+
+	.feature-card:hover {
+		transform: translateY(-5px);
+		border-color: #f0a500;
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+	}
+
+	.feature-icon {
+		font-size: 3rem;
+		color: #f0a500;
+		margin-bottom: 1rem;
+		display: block;
+	}
+
+	.feature-card h3 {
+		color: #ffffff;
+		font-size: 1.3rem;
+		margin-bottom: 1rem;
+		font-weight: 600;
+	}
+
+	.feature-card p {
+		color: #b0b0b0;
+		margin-bottom: 1.5rem;
+		line-height: 1.6;
+	}
+
+	.feature-card .btn {
+		display: inline-block;
+		background: rgba(240, 165, 0, 0.1);
+		border: 1px solid #f0a500;
+		color: #f0a500;
+		padding: 0.75rem 1.5rem;
+		border-radius: 25px;
+		text-decoration: none;
+		font-weight: 500;
+		transition: all 0.3s ease;
+	}
+
+	.feature-card .btn:hover {
+		background: #f0a500;
+		color: #1a1a2e;
+	}
+
+	/* Music Section */
+	.music-section {
+		background: rgba(240, 165, 0, 0.05);
+		border-radius: 12px;
+		padding: 3rem;
+	}
+
+	.music-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+	}
+
+	.music-item {
+		background: rgba(26, 26, 46, 0.5);
+		border: 1px solid rgba(240, 165, 0, 0.3);
+		border-radius: 8px;
+		padding: 1.5rem;
+	}
+
+	.music-item h4 {
+		color: #f0a500;
+		margin-bottom: 1rem;
+		font-size: 1.1rem;
+	}
+
+	.music-item ul {
+		margin: 0;
+		padding-left: 1.5rem;
+	}
+
+	.music-item li {
+		margin-bottom: 0.5rem;
+	}
+
+	/* Videos Section */
+	.videos-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: 2rem;
+	}
+
+	.video-item {
+		background: rgba(26, 26, 46, 0.5);
+		border: 1px solid rgba(240, 165, 0, 0.3);
+		border-radius: 8px;
+		padding: 1.5rem;
+		text-align: center;
+	}
+
+	.video-item h4 {
+		color: #ffffff;
+		margin-bottom: 1rem;
+	}
+
+	.video-placeholder {
+		background: rgba(240, 165, 0, 0.1);
+		border: 2px dashed #f0a500;
+		border-radius: 8px;
+		padding: 2rem;
+		margin-bottom: 1rem;
+		color: #f0a500;
+		font-size: 3rem;
+	}
+
+	/* Theory Section */
+	.theory-section {
+		background: rgba(26, 26, 46, 0.3);
+		border-radius: 12px;
+		padding: 3rem;
+		text-align: center;
+	}
+
+	.theory-section .btn-large {
+		display: inline-block;
+		background: linear-gradient(135deg, #f0a500, #ffc640);
+		color: #1a1a2e;
+		padding: 1.25rem 2.5rem;
+		border-radius: 50px;
+		font-weight: 600;
+		font-size: 1.2rem;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 15px rgba(240, 165, 0, 0.3);
+	}
+
+	.theory-section .btn-large:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 25px rgba(240, 165, 0, 0.4);
+		color: #1a1a2e;
+	}
+
+	/* About Section */
+	.about-section {
+		text-align: center;
+	}
+
+	.about-content {
+		max-width: 800px;
+		margin: 0 auto;
+		font-size: 1.1rem;
+		line-height: 1.8;
+		color: #b0b0b0;
+	}
+
+	.concept-image {
+		margin: 2rem auto;
+		display: block;
+		max-width: 400px;
+		width: 100%;
+		height: auto;
+		border-radius: 12px;
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+	}
+
+	/* Events Section */
+	.events-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: 2rem;
+	}
+
+	.event-card {
+		background: linear-gradient(135deg, #2a2a4e 0%, #1f1f3a 100%);
+		border: 1px solid rgba(240, 165, 0, 0.2);
+		border-radius: 12px;
+		padding: 2rem;
+		transition: all 0.3s ease;
+	}
+
+	.event-card:hover {
+		border-color: #f0a500;
+		transform: translateY(-2px);
+	}
+
+	.event-card h4 {
+		color: #f0a500;
+		margin-bottom: 1rem;
+		font-size: 1.2rem;
+	}
+
+	/* Source Code Section */
+	.source-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.source-item {
+		background: rgba(26, 26, 46, 0.5);
+		border: 1px solid rgba(240, 165, 0, 0.3);
+		border-radius: 8px;
+		padding: 1.5rem;
+	}
+
+	.source-item h4 {
+		color: #f0a500;
+		margin-bottom: 0.75rem;
+		font-size: 1.1rem;
+	}
+
+	/* References Section */
+	.references ul {
+		list-style: none;
+		padding: 0;
+	}
+
+	.references li {
+		background: rgba(26, 26, 46, 0.5);
+		border-left: 4px solid #f0a500;
+		margin-bottom: 1rem;
+		padding: 1.5rem;
+		border-radius: 0 8px 8px 0;
+	}
+
+	/* Responsive */
+	@media (max-width: 768px) {
+		.hero h1 {
+			font-size: 2.5rem;
+		}
+
+		.hero-tagline {
+			font-size: 1.1rem;
+		}
+
+		.container {
+			padding: 0 1rem;
+		}
+
+		.section {
+			padding: 3rem 0;
+		}
+
+		.section h2 {
+			font-size: 2rem;
+		}
+
+		.music-section,
+		.theory-section {
+			padding: 2rem;
+		}
+	}
 </style>
 
+<!-- Hero Section -->
+<section class="hero">
+	<div class="hero-content">
+		<h1>PitchGrid</h1>
+		<p class="hero-tagline">The tonal structure of Western music is two-dimensional</p>
+		<p class="hero-description">
+			PitchGrid is a revolutionary approach to understanding and creating music through 
+			two-dimensional lattice structures, making complex tuning theory accessible and fun.
+		</p>
+		<a href="/diatonic" class="hero-cta">Try Diatonic PitchGrid</a>
+	</div>
+</section>
 
 <div class="container">
-    <LogoWithCaption size={50} />
-    <h1>Welcome to the PitchGrid Homepage</h1>
-    <p>
-        <b>The tonal structure of Western music is (and always was) two-dimensional.</b>
-    </p>
-    <p>
-        <img src="/docs/images/PitchGrid-Basic-CMajor.png" alt="PitchGrid Basic C-Major" height="200" />
-    </p>
-    <p>
-        The PitchGrid concept clarifies this realization and 
-        draws a vision of its potential impact.
-    </p>
-    <h2>Who is behind the PitchGrid?</h2>
-    <p>
-        The PitchGrid project is the brainchild of Peter Jung, an independent researcher. Contact me at peter at pitchgrid dot io.
-    </p>
-    <h2>The PitchGrid Plugin</h2>
-    <p>
-        Tuning theory and current technology are too complicated and stand in the way of creative exploration. 
-        Tuning should be easy and fun. That's why I created the PitchGrid VST/AU plugin, which allows you to explore
-        a wide range of tunings simply by turning knobs. It soon will be released in collaboration 
-        with <a href="https://node.audio" target="_blank">Node Audio</a>, 
-        but you can already 
-        <a href="https://www.youtube.com/playlist?list=PLY4_jglyyynCPIssKpbC-ZejFcSrjBemR" target="_blank">watch it in action</a>.
-        If you are interested in joining the private beta, please write me an email.
-    </p>
-    <h2>Music created with PitchGrid</h2>
-    <p>
-        Here are some musical pieces created with the PitchGrid plugin:
-    </p>
-    <ul>
-        <li>
-            <a href="https://beatsbasteln.bandcamp.com/track/tranquil-9-5in17">"Tranquil 9&5in17" by Beats Basteln</a> 
-        </li>
-        <li>
-            <a href="https://soundcloud.com/peter-jung-119529179/sets/pitchgrid">PitchGrid playlist on SoundCloud</a>
-            <ul>
-                <li>
-                    <a href="https://soundcloud.com/forrest-fang/forrest-fang-harmonic-perch">"Harmonic Perch" by Forrest Fang</a> 
-                </li>
-                <li>
-                    <a href="https://soundcloud.com/western-sub/unseen-footage">"Unseen footage" by Western Sub</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-    <h2>Theory</h2>
-    <ul>
-        <li>
-            <a href="/info/PitchGrid">The PitchGrid Concept</a>
-        </li>
-    </ul>
-    <h2>Tools</h2>
-    <ul>
-        <li>
-            <a href="https://library.vcvrack.com/PitchGrid/MicroExquis">MicroExquis</a> 
-            A VCV Rack module and microtonal interface to the Exquis isomorphic MPE controller by Intuitive Instruments.
-            You can find some documentation <a href="/info/MicroExquis">right here</a>.
-        </li>
-        <li>
-            <a href="/diatonic">Diatonic PitchGrid</a> 
-            Online exploration tool for different tunings of the diatonic scale and its fully isomorphic layouts. 
-            Includes a small applet to tune your SOMA Terra synthesizer.
-        </li>
-        <li>
-            <a href="/scalemapper">PitchGrid Scale Mapper</a>
-            Online exploration tool for regular scale systems (recovering Erv Wilson's MOS scales) and mappings between them.
-        </li>
-        <li>
-            <a href="/mosmapper-piano">MOS Piano</a>
-            Online exploration tool that maps the PitchGrid to the piano keyboard.
-        </li>
-    </ul>
-    <h2>PitchGrid for Rhythm</h2>
-    <p>
-        Extending the PitchGrid concept to rhythm generation, PGRhythm is a parametric MIDI sequencer that creates complex rhythmic patterns using mathematical principles.
-    </p>
-    <ul>
-        <li>
-            <a href="https://github.com/peterjungx/pgrhythm">PGRhythm on GitHub</a>
-        </li>
-        <li>
-            <a href="https://youtu.be/dhIEhQWGUYo">Demo Video</a>
-        </li>
-        <li>
-            <a href="/helix-metronome">Helix Metronome</a> A special metronome view inspired by <a href="https://sebastiangramss.de/helix/" target="_blank">Sebastian Gramss' Helix</a>.
-        </li>
-    </ul>
-    <h2>Videos</h2>
-    <ul>
-        <li>
-            <a href="https://youtu.be/nl94-T3geNw">Microtonality on the Exquis - The PitchGrid Way</a> Watch me showing the features of the MicroExquis VCV Rack module.
-        </li>
-        <li>
-            <a href="https://youtu.be/ACGUp7ZtsWc">PitchGrid - First Demo</a> Watch me showing off some first impressions of my work on the PitchGrid Rack for VCV and some theoretical background.
-        </li>
-    </ul>
-    <h2>Events</h2>
-    <ul>
-        <li>
-            <a href="https://www.superbooth.com/en/messe-and-exhibitors/exhibitors/pitchgrid.html">PitchGrid exhibits at Superbooth 2025</a>
-            Join us at the Superbooth 2025 in Berlin, Germany (May 8th-10th) where I showcase the PitchGrid and its applications. 
-        </li>
-        <li>
-            <a href="https://www.superbooth.com/en/events/details/pro-audio-presentation-intuitive-instruments-pitchgrid-entonal-studio.html">Talk at SuperBooth 2025</a>
-            Join us at the joint talk with Intuitive Instruments and Entonal Studio at Superbooth 2025 in Berlin, Germany, May 9th 2:30pm-4:00pm.
-        </li>
-    </ul>
-    <h2>Source Code</h2>
-    <p>The sources of the PitchGrid project are publicly available on GitHub. Please get in touch if you'd like to contribute.</p>
-    <ul>
-        <li>
-            <a href="https://github.com/peterjungx/pitchgrid">pitchgrid</a> This Site, including the Diatonic PitchGrid, the ScaleMapper and the MOS Piano.
-        </li>
-        <li>
-            <a href="https://github.com/peterjungx/PitchGridRack">PitchGridRack</a> VCV Rack Plugin, including the MicroExquis module.
-        </li>
-        <li>
-            <a href="https://github.com/peterjungx/scalatrix">scalatrix</a> 
-            A library aimed at unifying the algorithmic foundations of the PitchGrid into a single code base. 
-            Written in C++, includes Python and WASM bindings. 
-        </li>
-    </ul> 
-    <h2>References</h2>
-    <!-- quote newton's "Standing on the shoulders of giants" -->
-    <p>
-        The PitchGrid is built on the shoulders of giants. 
-        I would like to thank the following people for their work and inspiration:
-    </p>
-    <ul>
-        <li>
-            <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4452394">Musical Tonality (2023)</a> 
-            Hans Peter Deutsch, my former employer, who wrote a 500+ page mathematical paper 
-            on the quest for the perfect tonal system for Western music, probably while meditating in the Himalayas.
-            This was the starting point of my work on the PitchGrid.
-        </li>
-        <li>
-            <a href="https://www.anaphoria.com/wilson.html">The Wilson Archives on Anaphoria Island</a> 
-            Erv Wilson, who first discovered the MOS scales (Moments of Symmetry), which I have re-discovered on the PitchGrid 2d-lattice. 
-            Kraig Grady, who popularized the MOS scales.
-        </li>
-        <li>
-            <a href="https://sethares.engr.wisc.edu">William Sethares</a> 
-            For his profound insights and research on the connection between tuning and the spectrum of sound.
-        </li>
-        <li>
-            <a href="https://nowandxen.libsyn.com">Now and Xen</a>
-            Stephen Weigel's podcast proved an invaluable source of information on the current state of microtonality. 
-        </li>
-    </ul>
-    <p>
-        If you are a builder of tools for musicians and are interested in integrating the PitchGrid into your product, 
-        I would be happy to support you. Please contact me at peter at pitchgrid dot io.
-    </p>
+	<!-- Feature Cards Section -->
+	<section class="section">
+		<h2>Explore PitchGrid</h2>
+		<div class="features-grid">
+			<div class="feature-card">
+				<span class="feature-icon">🎛️</span>
+				<h3>PitchGrid Plugin</h3>
+				<p>VST/AU plugin for easy exploration of tunings in your DAW. Turn knobs to discover new musical worlds.</p>
+				<a href="https://www.youtube.com/playlist?list=PLY4_jglyyynCPIssKpbC-ZejFcSrjBemR" target="_blank" class="btn">Watch Demo</a>
+			</div>
+			
+			<div class="feature-card">
+				<span class="feature-icon">🌐</span>
+				<h3>Online Tools</h3>
+				<p>Interactive web applications for exploring diatonic scales, MOS systems, and isomorphic keyboards.</p>
+				<a href="/diatonic" class="btn">Explore Tools</a>
+			</div>
+			
+			<div class="feature-card">
+				<span class="feature-icon">🗺️</span>
+				<h3>PitchGrid Mapper</h3>
+				<p>Visualize and explore regular scale systems with our advanced mapping tools and algorithms.</p>
+				<a href="/scalemapper" class="btn">Open Mapper</a>
+			</div>
+			
+			<div class="feature-card">
+				<span class="feature-icon">🥁</span>
+				<h3>PGRhythm</h3>
+				<p>Parametric MIDI sequencer that extends PitchGrid concepts to create complex rhythmic patterns.</p>
+				<a href="https://github.com/peterjungx/pgrhythm" target="_blank" class="btn">View on GitHub</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- About Section -->
+	<section class="section about-section">
+		<h2>Understanding PitchGrid</h2>
+		<div class="about-content">
+			<p>
+				<strong>The tonal structure of Western music is (and always was) two-dimensional.</strong>
+			</p>
+			<img src="/docs/images/PitchGrid-Basic-CMajor.png" alt="PitchGrid Basic C-Major" class="concept-image" />
+			<p>
+				The PitchGrid concept clarifies this realization and draws a vision of its potential impact.
+				By representing musical relationships on a two-dimensional lattice, we can understand complex 
+				tuning systems and create tools that make microtonality accessible to everyone.
+			</p>
+		</div>
+	</section>
+
+	<!-- Theory Section -->
+	<section class="section">
+		<div class="theory-section">
+			<h2>Dive Deeper Into Theory</h2>
+			<p style="font-size: 1.1rem; color: #b0b0b0; margin-bottom: 2rem;">
+				Learn about the mathematical foundations and theoretical insights that power PitchGrid
+			</p>
+			<a href="/info/PitchGrid" class="btn-large">Read the PitchGrid Concept</a>
+		</div>
+	</section>
+
+	<!-- Music Section -->
+	<section class="section">
+		<h2>Music Created with PitchGrid</h2>
+		<div class="music-section">
+			<p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem; color: #b0b0b0;">
+				Here are some musical pieces created with the PitchGrid plugin
+			</p>
+			<div class="music-grid">
+				<div class="music-item">
+					<h4>Featured Tracks</h4>
+					<ul>
+						<li>
+							<a href="https://beatsbasteln.bandcamp.com/track/tranquil-9-5in17" target="_blank">
+								"Tranquil 9&5in17" by Beats Basteln
+							</a>
+						</li>
+					</ul>
+				</div>
+				
+				<div class="music-item">
+					<h4>SoundCloud Playlist</h4>
+					<ul>
+						<li>
+							<a href="https://soundcloud.com/peter-jung-119529179/sets/pitchgrid" target="_blank">
+								PitchGrid Collection
+							</a>
+						</li>
+						<li>
+							<a href="https://soundcloud.com/forrest-fang/forrest-fang-harmonic-perch" target="_blank">
+								"Harmonic Perch" by Forrest Fang
+							</a>
+						</li>
+						<li>
+							<a href="https://soundcloud.com/western-sub/unseen-footage" target="_blank">
+								"Unseen footage" by Western Sub
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Videos Section -->
+	<section class="section">
+		<h2>Videos & Demonstrations</h2>
+		<div class="videos-grid">
+			<div class="video-item">
+				<div class="video-placeholder">📹</div>
+				<h4>Microtonality on the Exquis - The PitchGrid Way</h4>
+				<p style="color: #b0b0b0; margin-bottom: 1rem;">
+					Watch the features of the MicroExquis VCV Rack module in action.
+				</p>
+				<a href="https://youtu.be/nl94-T3geNw" target="_blank" class="btn">Watch Video</a>
+			</div>
+			
+			<div class="video-item">
+				<div class="video-placeholder">📹</div>
+				<h4>PitchGrid - First Demo</h4>
+				<p style="color: #b0b0b0; margin-bottom: 1rem;">
+					First impressions of PitchGrid Rack for VCV and theoretical background.
+				</p>
+				<a href="https://youtu.be/ACGUp7ZtsWc" target="_blank" class="btn">Watch Video</a>
+			</div>
+
+			<div class="video-item">
+				<div class="video-placeholder">📹</div>
+				<h4>PGRhythm Demo</h4>
+				<p style="color: #b0b0b0; margin-bottom: 1rem;">
+					See how PitchGrid concepts extend to rhythm generation.
+				</p>
+				<a href="https://youtu.be/dhIEhQWGUYo" target="_blank" class="btn">Watch Demo</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Events Section -->
+	<section class="section">
+		<h2>Events & Exhibitions</h2>
+		<div class="events-grid">
+			<div class="event-card">
+				<h4>PitchGrid at Superbooth 2025</h4>
+				<p>
+					Join us at Superbooth 2025 in Berlin, Germany (May 8th-10th) where we showcase 
+					the PitchGrid and its applications.
+				</p>
+				<a href="https://www.superbooth.com/en/messe-and-exhibitors/exhibitors/pitchgrid.html" target="_blank">
+					Learn More
+				</a>
+			</div>
+			
+			<div class="event-card">
+				<h4>Talk at SuperBooth 2025</h4>
+				<p>
+					Joint presentation with Intuitive Instruments and Entonal Studio. 
+					May 9th, 2:30pm-4:00pm in Berlin, Germany.
+				</p>
+				<a href="https://www.superbooth.com/en/events/details/pro-audio-presentation-intuitive-instruments-pitchgrid-entonal-studio.html" target="_blank">
+					Event Details
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Source Code Section -->
+	<section class="section">
+		<h2>Open Source</h2>
+		<p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem; color: #b0b0b0;">
+			All PitchGrid sources are publicly available on GitHub. Contributions welcome!
+		</p>
+		<div class="source-grid">
+			<div class="source-item">
+				<h4>pitchgrid</h4>
+				<p>This website, including the Diatonic PitchGrid, ScaleMapper and MOS Piano tools.</p>
+				<a href="https://github.com/peterjungx/pitchgrid" target="_blank">View Repository</a>
+			</div>
+			
+			<div class="source-item">
+				<h4>PitchGridRack</h4>
+				<p>VCV Rack plugin including the MicroExquis module for hardware integration.</p>
+				<a href="https://github.com/peterjungx/PitchGridRack" target="_blank">View Repository</a>
+			</div>
+			
+			<div class="source-item">
+				<h4>scalatrix</h4>
+				<p>Core library unifying PitchGrid algorithms. Written in C++ with Python and WASM bindings.</p>
+				<a href="https://github.com/peterjungx/scalatrix" target="_blank">View Repository</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- References Section -->
+	<section class="section references">
+		<h2>References & Inspiration</h2>
+		<p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem; color: #b0b0b0;">
+			PitchGrid is built on the shoulders of giants. Thank you to these pioneers:
+		</p>
+		<ul>
+			<li>
+				<strong><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4452394" target="_blank">Musical Tonality (2023)</a></strong>
+				<br>Hans Peter Deutsch's 500+ page mathematical exploration of perfect tonal systems for Western music.
+			</li>
+			<li>
+				<strong><a href="https://www.anaphoria.com/wilson.html" target="_blank">The Wilson Archives</a></strong>
+				<br>Erv Wilson's discovery of MOS scales and Kraig Grady's popularization of these concepts.
+			</li>
+			<li>
+				<strong><a href="https://sethares.engr.wisc.edu" target="_blank">William Sethares</a></strong>
+				<br>Profound insights on the connection between tuning and the spectrum of sound.
+			</li>
+			<li>
+				<strong><a href="https://nowandxen.libsyn.com" target="_blank">Now and Xen</a></strong>
+				<br>Stephen Weigel's invaluable podcast on the current state of microtonality.
+			</li>
+		</ul>
+	</section>
+
+	<!-- Contact Section -->
+	<section class="section" style="text-align: center;">
+		<h2>Get Involved</h2>
+		<div class="about-content">
+			<p>
+				<strong>Who is behind PitchGrid?</strong><br>
+				The PitchGrid project is the brainchild of Peter Jung, an independent researcher.
+			</p>
+			<p>
+				If you are a builder of tools for musicians and are interested in integrating 
+				PitchGrid into your product, or if you'd like to contribute to the project, 
+				I would be happy to support you.
+			</p>
+			<p style="margin-top: 2rem;">
+				<a href="mailto:peter@pitchgrid.io" style="font-size: 1.2rem; font-weight: 600;">
+					Contact me at peter@pitchgrid.io
+				</a>
+			</p>
+		</div>
+	</section>
 </div>
