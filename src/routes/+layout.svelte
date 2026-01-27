@@ -104,14 +104,17 @@
 	.nav-icon-links {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
+		gap: 1.25rem;
+		margin-left: 0.5rem;
 	}
 
 	.nav-icon {
-		display: flex;
+		display: inline-flex;
 		align-items: center;
+		justify-content: center;
 		color: #e0e0e0;
 		transition: color 0.3s ease;
+		line-height: 1;
 	}
 
 	.nav-icon:hover {
