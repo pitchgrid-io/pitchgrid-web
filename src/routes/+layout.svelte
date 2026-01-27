@@ -235,7 +235,7 @@
 						<a href="https://library.vcvrack.com/PitchGrid/MicroExquis" target="_blank">MicroExquis (VCV)</a>
 					</div>
 				</li>
-				<li><a href="/info/PitchGrid">About</a></li>
+				<li><a href="/info/PitchGrid">Info</a></li>
 				<li><a href="https://www.youtube.com/playlist?list=PLY4_jglyyynCPIssKpbC-ZejFcSrjBemR" target="_blank">Plugin</a></li>
 				<li><a href="https://github.com/peterjungx/pitchgrid" target="_blank">GitHub</a></li>
 			</ul>

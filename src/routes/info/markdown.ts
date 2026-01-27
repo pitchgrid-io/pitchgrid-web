@@ -12,22 +12,10 @@ const options:MarkedKatexOptions = {
 };
 marked.use(markedKatex(options));
 
-// Initialize mermaid with better configuration
+// Initialize mermaid
 mermaid.initialize({
     startOnLoad: false,
-    theme: 'dark',
-    themeVariables: {
-        primaryColor: '#f0a500',
-        primaryTextColor: '#ffffff',
-        primaryBorderColor: '#f0a500',
-        lineColor: '#ffffff',
-        secondaryColor: '#1a1a2e',
-        tertiaryColor: '#16213e',
-        background: '#1a1a2e',
-        mainBkg: '#1a1a2e',
-        nodeBorder: '#f0a500',
-        clusterBkg: 'rgba(240, 165, 0, 0.1)'
-    },
+    theme: 'default',
     flowchart: {
         htmlLabels: true,
         curve: 'basis'
@@ -64,37 +52,49 @@ marked.use({renderer});
 
 export function parseMarkdown(md: string) {
     let tokens = marked.lexer(md);
-    // walk through the tokens and identify code blocks with lang="abc" or "mermaid". parse them with respective parsers
+    let mermaidCounter = 0;
+    
     for (let i = 0; i < tokens.length; i++) {
         const token = tokens[i] as any;
         if (token.type === "code" && token.lang === "music-abc") {
-            
             (async () => {
                 var abc = token.text;
                 await tick();
                 ABCJS.renderAbc(`abcjs-${i}`, abc);
             })();
             token.type = "html";
-            token.text = `<div id='abcjs-${i}' ></div>`; 
+            token.text = `<div id='abcjs-${i}'></div>`; 
         } else if (token.type === "code" && token.lang === "mermaid") {
-            let mermaidSvg = '';
-            try {
-                // Render mermaid synchronously during parse
-                const renderResult = mermaid.render(`mermaid-${i}`, token.text);
-                if (renderResult && typeof renderResult === 'object' && 'svg' in renderResult) {
-                    mermaidSvg = renderResult.svg;
-                } else if (typeof renderResult === 'string') {
-                    mermaidSvg = renderResult;
-                } else {
-                    mermaidSvg = '<div class="error">Mermaid render failed: unexpected result type</div>';
-                }
-            } catch (error: any) {
-                console.error('Mermaid render error:', error);
-                mermaidSvg = `<div class="error">Mermaid diagram error: ${error.message}</div>`;
-            }
+            // Use mermaid's built-in class-based rendering
+            const code = token.text;
             token.type = "html";
-            token.text = `<div class="mermaid-diagram">${mermaidSvg}</div>`; 
+            token.text = `<div class="mermaid-diagram"><pre class="mermaid">${escapeHtml(code)}</pre></div>`;
+            mermaidCounter++;
         }
     }
-    return marked.parser(tokens);
+    
+    const html = marked.parser(tokens);
+    
+    // Let mermaid find and render all .mermaid elements after DOM update
+    if (mermaidCounter > 0) {
+        (async () => {
+            await tick();
+            await new Promise(r => setTimeout(r, 200));
+            try {
+                await mermaid.run({ querySelector: '.mermaid' });
+            } catch (error: any) {
+                console.error('Mermaid run error:', error);
+            }
+        })();
+    }
+    
+    return html;
+}
+
+function escapeHtml(text: string): string {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
 }
