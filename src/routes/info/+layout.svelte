@@ -7,14 +7,13 @@
     let activeTab = 0;
     let valid = true;
 
-    let menuitems:string[] = ['PitchGrid', 'ScaleMapper', 'MicroExquis', 'plugin-user-manual', 'The PitchGrid - Doing Microtonality with Structure'];
+    let menuitems:string[] = ['PitchGrid', 'ScaleMapper', 'MicroExquis', 'plugin-user-manual'];
     
     const labelMapping: {[key: string]: string} = {
         'PitchGrid': 'The PitchGrid Concept',
         'plugin-user-manual': 'Plugin User Manual',
         'MicroExquis': 'MicroExquis Guide',
-        'ScaleMapper': 'Scale Mapper',
-        'The PitchGrid - Doing Microtonality with Structure': 'Microtonality with Structure'
+        'ScaleMapper': 'Scale Mapper'
     };
 
     function selectTab(index: number) {
