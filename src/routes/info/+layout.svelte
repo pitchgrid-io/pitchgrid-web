@@ -7,13 +7,14 @@
     let activeTab = 0;
     let valid = true;
 
-    let menuitems:string[] = ['PitchGrid', 'ScaleMapper', 'MicroExquis', 'plugin-user-manual'];
+    let menuitems:string[] = ['PitchGrid', 'ScaleMapper', 'MicroExquis', 'PitchGridMapper', 'plugin-user-manual'];
     
     const labelMapping: {[key: string]: string} = {
         'PitchGrid': 'The PitchGrid Concept',
         'plugin-user-manual': 'Plugin User Manual',
         'MicroExquis': 'MicroExquis Guide',
-        'ScaleMapper': 'Scale Mapper'
+        'ScaleMapper': 'Scale Mapper',
+        'PitchGridMapper': 'PitchGrid Mapper'
     };
 
     function selectTab(index: number) {

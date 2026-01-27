@@ -196,6 +196,49 @@
 		color: #1a1a2e;
 	}
 
+	/* Mapper Showcase */
+	.mapper-showcase {
+		text-align: center;
+	}
+
+	.mapper-subtitle {
+		font-size: 1.15rem;
+		color: #b0b0b0;
+		margin-bottom: 2rem;
+		max-width: 700px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.mapper-screenshot {
+		max-width: 780px;
+		width: 100%;
+		margin: 0 auto 2rem;
+	}
+
+	.mapper-screenshot img {
+		width: 100%;
+		height: auto;
+		border-radius: 12px;
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 171, 0, 0.1);
+	}
+
+	.mapper-description {
+		font-size: 1.05rem;
+		color: #b0b0b0;
+		max-width: 700px;
+		margin: 0 auto 2rem;
+		line-height: 1.7;
+	}
+
+	.mapper-cta {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
 	/* Music Section */
 	.music-section {
 		background: rgba(255, 171, 0, 0.05);
@@ -447,8 +490,15 @@
 			</div>
 			
 			<div class="feature-card">
-				<span class="feature-icon">🗺️</span>
+				<span class="feature-icon">🎹</span>
 				<h3>PitchGrid Mapper</h3>
+				<p>A universal mapper between PitchGrid microtonal scales and isomorphic MIDI controllers (LinnStrument, Exquis, Launchpad, Lumatone). Connects your controller to the PitchGrid plugin.</p>
+				<a href="https://github.com/pitchgrid-io/pitchgrid-mapper/releases" target="_blank" class="btn">Download</a>
+			</div>
+
+			<div class="feature-card">
+				<span class="feature-icon">🗺️</span>
+				<h3>Scale Mapper</h3>
 				<p>Visualize and explore regular scale systems with our advanced mapping tools and algorithms.</p>
 				<a href="/scalemapper" class="btn">Open Mapper</a>
 			</div>
@@ -459,6 +509,27 @@
 				<p>Parametric MIDI sequencer that extends PitchGrid concepts to create complex rhythmic patterns.</p>
 				<a href="https://github.com/peterjungx/pgrhythm" target="_blank" class="btn">View on GitHub</a>
 			</div>
+		</div>
+	</section>
+
+	<!-- PitchGrid Mapper Showcase -->
+	<section class="section mapper-showcase">
+		<h2>PitchGrid Mapper</h2>
+		<p class="mapper-subtitle">
+			Play microtonal scales on your favorite isomorphic MIDI controller
+		</p>
+		<div class="mapper-screenshot">
+			<img src="/docs/images/PitchGridMapper-Isomorphic.png" alt="PitchGrid Mapper — Isomorphic hexagonal layout" />
+		</div>
+		<p class="mapper-description">
+			PitchGrid Mapper creates a virtual MIDI device that bridges your hardware controller 
+			and the PitchGrid plugin. It automatically discovers supported controllers — LinnStrument, 
+			Exquis, Launchpad, Lumatone — and maps their pads to PitchGrid's microtonal note mappings 
+			with isomorphic, string-like, or piano-like layouts.
+		</p>
+		<div class="mapper-cta">
+			<a href="https://github.com/pitchgrid-io/pitchgrid-mapper/releases" target="_blank" class="hero-cta">Download PitchGrid Mapper</a>
+			<a href="/info/PitchGridMapper" class="hero-cta-secondary">Learn More</a>
 		</div>
 	</section>
 
