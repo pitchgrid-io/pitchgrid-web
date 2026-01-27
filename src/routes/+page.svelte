@@ -54,6 +54,15 @@
 		margin-right: auto;
 	}
 
+	.hero-cta-group {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		margin-bottom: 3rem;
+	}
+
 	.hero-cta {
 		display: inline-block;
 		background: linear-gradient(135deg, #f0a500, #ffc640);
@@ -71,6 +80,40 @@
 		transform: translateY(-2px);
 		box-shadow: 0 8px 25px rgba(240, 165, 0, 0.4);
 		color: #1a1a2e;
+	}
+
+	.hero-cta-secondary {
+		display: inline-block;
+		background: transparent;
+		border: 2px solid rgba(240, 165, 0, 0.5);
+		color: #f0a500;
+		padding: 0.9rem 2rem;
+		border-radius: 50px;
+		font-weight: 600;
+		font-size: 1.1rem;
+		text-decoration: none;
+		transition: all 0.3s ease;
+	}
+
+	.hero-cta-secondary:hover {
+		border-color: #f0a500;
+		background: rgba(240, 165, 0, 0.1);
+		transform: translateY(-2px);
+		color: #f0a500;
+	}
+
+	.hero-screenshot {
+		max-width: 720px;
+		width: 100%;
+		margin: 0 auto;
+		display: block;
+	}
+
+	.hero-screenshot img {
+		width: 100%;
+		height: auto;
+		border-radius: 12px;
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(240, 165, 0, 0.1);
 	}
 
 	/* Container */
@@ -338,6 +381,15 @@
 			font-size: 1.1rem;
 		}
 
+		.hero-cta-group {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.hero-screenshot {
+			max-width: 95%;
+		}
+
 		.container {
 			padding: 0 1rem;
 		}
@@ -363,10 +415,16 @@
 		<h1>PitchGrid</h1>
 		<p class="hero-tagline">The tonal structure of Western music is two-dimensional</p>
 		<p class="hero-description">
-			PitchGrid is a revolutionary approach to understanding and creating music through 
-			two-dimensional lattice structures, making complex tuning theory accessible and fun.
+			Explore microtonality in your DAW — a VST3/AU/CLAP plugin that makes 
+			alternative tuning systems accessible, intuitive, and fun.
 		</p>
-		<a href="/diatonic" class="hero-cta">Try Diatonic PitchGrid</a>
+		<div class="hero-cta-group">
+			<a href="https://node.audio/products/pitchgrid" class="hero-cta" target="_blank">Get PitchGrid Plugin</a>
+			<a href="/diatonic" class="hero-cta-secondary">Try Diatonic PitchGrid</a>
+		</div>
+		<div class="hero-screenshot">
+			<img src="/docs/images/PitchGridPluginUI.png" alt="PitchGrid Plugin UI" />
+		</div>
 	</div>
 </section>
 
@@ -378,8 +436,8 @@
 			<div class="feature-card">
 				<span class="feature-icon">🎛️</span>
 				<h3>PitchGrid Plugin</h3>
-				<p>VST/AU plugin for easy exploration of tunings in your DAW. Turn knobs to discover new musical worlds.</p>
-				<a href="https://www.youtube.com/playlist?list=PLY4_jglyyynCPIssKpbC-ZejFcSrjBemR" target="_blank" class="btn">Watch Demo</a>
+				<p>VST3/AU/CLAP plugin for easy exploration of tunings in your DAW. Turn knobs to discover new musical worlds.</p>
+				<a href="https://node.audio/products/pitchgrid" target="_blank" class="btn">Get the Plugin</a>
 			</div>
 			
 			<div class="feature-card">
@@ -545,7 +603,7 @@
 		<div class="source-grid">
 			<div class="source-item">
 				<h4>pitchgrid</h4>
-				<p>This website, including the Diatonic PitchGrid, ScaleMapper and MOS Piano tools.</p>
+				<p>This website, including the Diatonic PitchGrid and ScaleMapper tools.</p>
 				<a href="https://github.com/peterjungx/pitchgrid" target="_blank">View Repository</a>
 			</div>
 			
