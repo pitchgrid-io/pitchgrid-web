@@ -79,6 +79,7 @@
 
 	.nav-links {
 		display: flex;
+		align-items: center;
 		gap: 2rem;
 		list-style: none;
 		margin: 0;
@@ -87,6 +88,8 @@
 
 	.nav-links li {
 		position: relative;
+		display: flex;
+		align-items: center;
 	}
 
 	.nav-links a {
