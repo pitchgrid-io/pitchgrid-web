@@ -212,17 +212,30 @@
     }
 
     :global(.info-layout .mermaid-diagram) {
-        display: flex;
-        justify-content: center;
+        display: block;
+        width: 100%;
         margin: 20px 0;
         background: #fafafa;
         border: 1px solid #eee;
         border-radius: 8px;
         padding: 20px;
+        box-sizing: border-box;
+        overflow-x: auto;
     }
-    
+
+    :global(.info-layout .mermaid-diagram pre.mermaid) {
+        display: block;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: none;
+        overflow: visible;
+    }
+
     :global(.info-layout .mermaid-diagram svg) {
-        max-width: 100%;
+        display: block;
+        width: 100% !important;
+        max-width: 100% !important;
         height: auto;
     }
     
