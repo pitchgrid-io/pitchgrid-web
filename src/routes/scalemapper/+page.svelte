@@ -122,19 +122,25 @@
 </script>
 
 <style>
+    .scalemapper-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 75px);
+        overflow: hidden;
+    }
+    .scalemapper-toolbar {
+        flex-shrink: 0;
+        padding: 0 8px;
+    }
     .container {
-        position: absolute;
-        overflow:hidden;
-        left:0px;
-        right:0px;
-        top:69px;
-        bottom:0px;
-        /*border: 1px solid red;*/
-        /*background-color: #FFB319;*/
+        flex: 1;
+        overflow: hidden;
         background-color: #FFFFFF;
     }
 </style>
 
+<div class="scalemapper-wrapper">
+<div class="scalemapper-toolbar">
 <Grid cols={16}>
     <Grid.Col span={2}>
         <NativeSelect 
@@ -183,6 +189,7 @@
         </Group>
     </Grid.Col>
 </Grid>
+</div>
 
 <div class="container" bind:clientWidth={w} bind:clientHeight={h}>
     <svg width="100%" height="100%" viewBox="{-centerX} {-centerY} {w} {h}" xmlns="http://www.w3.org/2000/svg">
@@ -217,5 +224,6 @@
 
 
     </svg>
+</div>
 </div>
 <!--<ContextMenu />-->
