@@ -76,7 +76,7 @@
 
     .tabs-bar {
         background: #f5f5f5;
-        border-bottom: 2px solid #f0a500;
+        border-bottom: 2px solid #FFAB00;
         padding: 0;
         overflow-x: auto;
     }
@@ -104,12 +104,12 @@
 
     .tab:hover {
         color: #1a1a2e;
-        background: rgba(240, 165, 0, 0.08);
+        background: rgba(255, 171, 0, 0.08);
     }
 
     .tab.active {
         color: #d48900;
-        border-bottom-color: #f0a500;
+        border-bottom-color: #FFAB00;
         font-weight: 600;
     }
 
@@ -126,7 +126,7 @@
     }
 
     :global(.info-layout a:hover) {
-        color: #f0a500;
+        color: #FFAB00;
     }
 
     :global(.info-layout h1) {
@@ -134,7 +134,7 @@
         font-size: 2rem;
         margin-top: 1rem;
         margin-bottom: 1rem;
-        border-bottom: 2px solid #f0a500;
+        border-bottom: 2px solid #FFAB00;
         padding-bottom: 0.5rem;
     }
 
@@ -204,7 +204,7 @@
     }
 
     :global(.info-layout blockquote) {
-        border-left: 4px solid #f0a500;
+        border-left: 4px solid #FFAB00;
         margin: 1rem 0;
         padding: 0.5rem 1rem;
         background: #fffbf0;

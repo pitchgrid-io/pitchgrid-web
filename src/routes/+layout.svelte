@@ -27,13 +27,13 @@
 	}
 
 	:global(a) {
-		color: #f0a500;
+		color: #FFAB00;
 		text-decoration: none;
 		transition: color 0.3s ease;
 	}
 
 	:global(a:hover) {
-		color: #ffc640;
+		color: #FFCC40;
 		text-decoration: underline;
 	}
 
@@ -49,7 +49,7 @@
 		top: 0;
 		background: rgba(26, 26, 46, 0.95);
 		backdrop-filter: blur(10px);
-		border-bottom: 1px solid rgba(240, 165, 0, 0.3);
+		border-bottom: 1px solid rgba(255, 171, 0, 0.3);
 		z-index: 100;
 		padding: 1rem 0;
 	}
@@ -74,7 +74,7 @@
 	}
 
 	.nav-logo:hover {
-		color: #f0a500;
+		color: #FFAB00;
 	}
 
 	.nav-links {
@@ -97,7 +97,7 @@
 	}
 
 	.nav-links a:hover {
-		color: #f0a500;
+		color: #FFAB00;
 		text-decoration: none;
 	}
 
@@ -115,7 +115,7 @@
 	}
 
 	.nav-icon:hover {
-		color: #f0a500;
+		color: #FFAB00;
 	}
 
 	/* Dropdown */
@@ -129,7 +129,7 @@
 		top: 100%;
 		left: 0;
 		background: #1a1a2e;
-		border: 1px solid rgba(240, 165, 0, 0.3);
+		border: 1px solid rgba(255, 171, 0, 0.3);
 		border-radius: 8px;
 		min-width: 200px;
 		padding: 0.5rem 0;
@@ -149,8 +149,8 @@
 	}
 
 	.dropdown-content a:hover {
-		background: rgba(240, 165, 0, 0.1);
-		color: #f0a500;
+		background: rgba(255, 171, 0, 0.1);
+		color: #FFAB00;
 	}
 
 	/* Mobile menu */
@@ -171,7 +171,7 @@
 	/* Footer */
 	.footer {
 		background: #16162a;
-		border-top: 1px solid rgba(240, 165, 0, 0.3);
+		border-top: 1px solid rgba(255, 171, 0, 0.3);
 		padding: 3rem 0 1rem;
 		margin-top: auto;
 	}
@@ -190,7 +190,7 @@
 	}
 
 	.footer-section h3 {
-		color: #f0a500;
+		color: #FFAB00;
 		margin-bottom: 1rem;
 		font-size: 1.1rem;
 	}
@@ -206,7 +206,7 @@
 	}
 
 	.footer-bottom {
-		border-top: 1px solid rgba(240, 165, 0, 0.2);
+		border-top: 1px solid rgba(255, 171, 0, 0.2);
 		padding-top: 1rem;
 		text-align: center;
 		color: #888;

@@ -38,7 +38,7 @@
 
 	.hero-tagline {
 		font-size: 1.25rem;
-		color: #f0a500;
+		color: #FFAB00;
 		margin-bottom: 2rem;
 		max-width: 800px;
 		margin-left: auto;
@@ -65,7 +65,7 @@
 
 	.hero-cta {
 		display: inline-block;
-		background: linear-gradient(135deg, #f0a500, #ffc640);
+		background: linear-gradient(135deg, #FFAB00, #FFCC40);
 		color: #1a1a2e;
 		padding: 1rem 2rem;
 		border-radius: 50px;
@@ -73,20 +73,20 @@
 		font-size: 1.1rem;
 		text-decoration: none;
 		transition: all 0.3s ease;
-		box-shadow: 0 4px 15px rgba(240, 165, 0, 0.3);
+		box-shadow: 0 4px 15px rgba(255, 171, 0, 0.3);
 	}
 
 	.hero-cta:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 8px 25px rgba(240, 165, 0, 0.4);
+		box-shadow: 0 8px 25px rgba(255, 171, 0, 0.4);
 		color: #1a1a2e;
 	}
 
 	.hero-cta-secondary {
 		display: inline-block;
 		background: transparent;
-		border: 2px solid rgba(240, 165, 0, 0.5);
-		color: #f0a500;
+		border: 2px solid rgba(255, 171, 0, 0.5);
+		color: #FFAB00;
 		padding: 0.9rem 2rem;
 		border-radius: 50px;
 		font-weight: 600;
@@ -96,10 +96,10 @@
 	}
 
 	.hero-cta-secondary:hover {
-		border-color: #f0a500;
-		background: rgba(240, 165, 0, 0.1);
+		border-color: #FFAB00;
+		background: rgba(255, 171, 0, 0.1);
 		transform: translateY(-2px);
-		color: #f0a500;
+		color: #FFAB00;
 	}
 
 	.hero-screenshot {
@@ -113,7 +113,7 @@
 		width: 100%;
 		height: auto;
 		border-radius: 12px;
-		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(240, 165, 0, 0.1);
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 171, 0, 0.1);
 	}
 
 	/* Container */
@@ -145,7 +145,7 @@
 
 	.feature-card {
 		background: linear-gradient(135deg, #2a2a4e 0%, #1f1f3a 100%);
-		border: 1px solid rgba(240, 165, 0, 0.2);
+		border: 1px solid rgba(255, 171, 0, 0.2);
 		border-radius: 12px;
 		padding: 2rem;
 		text-align: center;
@@ -155,13 +155,13 @@
 
 	.feature-card:hover {
 		transform: translateY(-5px);
-		border-color: #f0a500;
+		border-color: #FFAB00;
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 	}
 
 	.feature-icon {
 		font-size: 3rem;
-		color: #f0a500;
+		color: #FFAB00;
 		margin-bottom: 1rem;
 		display: block;
 	}
@@ -181,9 +181,9 @@
 
 	.feature-card .btn {
 		display: inline-block;
-		background: rgba(240, 165, 0, 0.1);
-		border: 1px solid #f0a500;
-		color: #f0a500;
+		background: rgba(255, 171, 0, 0.1);
+		border: 1px solid #FFAB00;
+		color: #FFAB00;
 		padding: 0.75rem 1.5rem;
 		border-radius: 25px;
 		text-decoration: none;
@@ -192,13 +192,13 @@
 	}
 
 	.feature-card .btn:hover {
-		background: #f0a500;
+		background: #FFAB00;
 		color: #1a1a2e;
 	}
 
 	/* Music Section */
 	.music-section {
-		background: rgba(240, 165, 0, 0.05);
+		background: rgba(255, 171, 0, 0.05);
 		border-radius: 12px;
 		padding: 3rem;
 	}
@@ -211,13 +211,13 @@
 
 	.music-item {
 		background: rgba(26, 26, 46, 0.5);
-		border: 1px solid rgba(240, 165, 0, 0.3);
+		border: 1px solid rgba(255, 171, 0, 0.3);
 		border-radius: 8px;
 		padding: 1.5rem;
 	}
 
 	.music-item h4 {
-		color: #f0a500;
+		color: #FFAB00;
 		margin-bottom: 1rem;
 		font-size: 1.1rem;
 	}
@@ -240,7 +240,7 @@
 
 	.video-item {
 		background: rgba(26, 26, 46, 0.5);
-		border: 1px solid rgba(240, 165, 0, 0.3);
+		border: 1px solid rgba(255, 171, 0, 0.3);
 		border-radius: 8px;
 		padding: 1.5rem;
 		text-align: center;
@@ -252,12 +252,12 @@
 	}
 
 	.video-placeholder {
-		background: rgba(240, 165, 0, 0.1);
-		border: 2px dashed #f0a500;
+		background: rgba(255, 171, 0, 0.1);
+		border: 2px dashed #FFAB00;
 		border-radius: 8px;
 		padding: 2rem;
 		margin-bottom: 1rem;
-		color: #f0a500;
+		color: #FFAB00;
 		font-size: 3rem;
 	}
 
@@ -271,7 +271,7 @@
 
 	.theory-section .btn-large {
 		display: inline-block;
-		background: linear-gradient(135deg, #f0a500, #ffc640);
+		background: linear-gradient(135deg, #FFAB00, #FFCC40);
 		color: #1a1a2e;
 		padding: 1.25rem 2.5rem;
 		border-radius: 50px;
@@ -279,12 +279,12 @@
 		font-size: 1.2rem;
 		text-decoration: none;
 		transition: all 0.3s ease;
-		box-shadow: 0 4px 15px rgba(240, 165, 0, 0.3);
+		box-shadow: 0 4px 15px rgba(255, 171, 0, 0.3);
 	}
 
 	.theory-section .btn-large:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 8px 25px rgba(240, 165, 0, 0.4);
+		box-shadow: 0 8px 25px rgba(255, 171, 0, 0.4);
 		color: #1a1a2e;
 	}
 
@@ -320,19 +320,19 @@
 
 	.event-card {
 		background: linear-gradient(135deg, #2a2a4e 0%, #1f1f3a 100%);
-		border: 1px solid rgba(240, 165, 0, 0.2);
+		border: 1px solid rgba(255, 171, 0, 0.2);
 		border-radius: 12px;
 		padding: 2rem;
 		transition: all 0.3s ease;
 	}
 
 	.event-card:hover {
-		border-color: #f0a500;
+		border-color: #FFAB00;
 		transform: translateY(-2px);
 	}
 
 	.event-card h4 {
-		color: #f0a500;
+		color: #FFAB00;
 		margin-bottom: 1rem;
 		font-size: 1.2rem;
 	}
@@ -346,13 +346,13 @@
 
 	.source-item {
 		background: rgba(26, 26, 46, 0.5);
-		border: 1px solid rgba(240, 165, 0, 0.3);
+		border: 1px solid rgba(255, 171, 0, 0.3);
 		border-radius: 8px;
 		padding: 1.5rem;
 	}
 
 	.source-item h4 {
-		color: #f0a500;
+		color: #FFAB00;
 		margin-bottom: 0.75rem;
 		font-size: 1.1rem;
 	}
@@ -365,7 +365,7 @@
 
 	.references li {
 		background: rgba(26, 26, 46, 0.5);
-		border-left: 4px solid #f0a500;
+		border-left: 4px solid #FFAB00;
 		margin-bottom: 1rem;
 		padding: 1.5rem;
 		border-radius: 0 8px 8px 0;
@@ -415,12 +415,11 @@
 		<h1>PitchGrid</h1>
 		<p class="hero-tagline">The tonal structure of Western music is two-dimensional</p>
 		<p class="hero-description">
-			Explore microtonality in your DAW — a VST3/AU/CLAP plugin that makes 
+			Explore microtonality in your DAW — a VST3/AU plugin that makes 
 			alternative tuning systems accessible, intuitive, and fun.
 		</p>
 		<div class="hero-cta-group">
 			<a href="https://node.audio/products/pitchgrid" class="hero-cta" target="_blank">Get PitchGrid Plugin</a>
-			<a href="/diatonic" class="hero-cta-secondary">Try Diatonic PitchGrid</a>
 		</div>
 		<div class="hero-screenshot">
 			<img src="/docs/images/PitchGridPluginUI.png" alt="PitchGrid Plugin UI" />
@@ -436,7 +435,7 @@
 			<div class="feature-card">
 				<span class="feature-icon">🎛️</span>
 				<h3>PitchGrid Plugin</h3>
-				<p>VST3/AU/CLAP plugin for easy exploration of tunings in your DAW. Turn knobs to discover new musical worlds.</p>
+				<p>VST3/AU plugin for easy exploration of tunings in your DAW. Turn knobs to discover new musical worlds.</p>
 				<a href="https://node.audio/products/pitchgrid" target="_blank" class="btn">Get the Plugin</a>
 			</div>
 			
