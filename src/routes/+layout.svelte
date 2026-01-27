@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { DiscordLogo, GithubLogo } from 'radix-icons-svelte';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+
+	injectAnalytics({ mode: 'auto' });
 </script>
 
 <svelte:head>
