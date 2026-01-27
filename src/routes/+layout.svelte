@@ -139,8 +139,18 @@
 		border-radius: 8px;
 		min-width: 200px;
 		padding: 0.5rem 0;
-		margin-top: 0.5rem;
+		padding-top: 1rem;
+		margin-top: 0;
 		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+	}
+
+	.dropdown-content::before {
+		content: '';
+		position: absolute;
+		top: -0.5rem;
+		left: 0;
+		right: 0;
+		height: 0.5rem;
 	}
 
 	.dropdown:hover .dropdown-content {

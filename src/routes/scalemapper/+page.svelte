@@ -131,6 +131,8 @@
     .scalemapper-toolbar {
         flex-shrink: 0;
         padding: 0 8px;
+        background-color: #FFFFFF;
+        color: #333;
     }
     .container {
         flex: 1;

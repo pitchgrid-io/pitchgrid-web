@@ -458,8 +458,8 @@
 		<h1>PitchGrid</h1>
 		<p class="hero-tagline">The tonal structure of Western music is two-dimensional</p>
 		<p class="hero-description">
-			Explore microtonality in your DAW — a VST3/AU plugin that makes 
-			alternative tuning systems accessible, intuitive, and fun.
+			Interactive tuning and MIDI mapping for microtonal music — a VST3/AU plugin
+			that makes alternative tuning systems accessible, intuitive, and fun.
 		</p>
 		<div class="hero-cta-group">
 			<a href="https://node.audio/products/pitchgrid" class="hero-cta" target="_blank">Get PitchGrid Plugin</a>
