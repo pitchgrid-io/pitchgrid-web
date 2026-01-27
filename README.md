@@ -1,8 +1,8 @@
 # [pitchgrid.io](https://pitchgrid.io)
 
-A tool for exploring rank-2 regular temperaments (aka consistent tunings) and isomorphic keyboard layouts for Western music.
+This is the repo of the PitchGrid website.
 
-
+PitchGrid is a new unifying approach to non-traditional intonations, enabling interactive, real time scale creation, tuning and mapping.
 
 ## Development
 
