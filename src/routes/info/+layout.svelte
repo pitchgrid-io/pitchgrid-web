@@ -7,7 +7,7 @@
     let activeTab = 0;
     let valid = true;
 
-    let menuitems:string[] = ['PitchGrid', 'ScaleMapper', 'MicroExquis', 'PitchGridMapper', 'plugin-user-manual'];
+    let menuitems:string[] = ['PitchGrid', 'plugin-user-manual', 'PitchGridMapper', 'MicroExquis', 'ScaleMapper'];
     
     const labelMapping: {[key: string]: string} = {
         'PitchGrid': 'The PitchGrid Concept',

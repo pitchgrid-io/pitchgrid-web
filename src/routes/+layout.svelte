@@ -267,7 +267,16 @@
 						<a href="https://library.vcvrack.com/PitchGrid/MicroExquis" target="_blank">MicroExquis (VCV)</a>
 					</div>
 				</li>
-				<li><a href="/info/PitchGrid">Info</a></li>
+				<li class="dropdown">
+					<a href="/info/PitchGrid">Info</a>
+					<div class="dropdown-content">
+						<a href="/info/PitchGrid">The PitchGrid Concept</a>
+						<a href="/info/plugin-user-manual">Plugin User Manual</a>
+						<a href="/info/PitchGridMapper">PitchGrid Mapper</a>
+						<a href="/info/MicroExquis">MicroExquis Guide</a>
+						<a href="/info/ScaleMapper">Scale Mapper</a>
+					</div>
+				</li>
 				<li><a href="https://node.audio/products/pitchgrid" target="_blank">Plugin</a></li>
 				<li class="nav-icon-links">
 					<a href="https://www.youtube.com/playlist?list=PLY4_jglyyynCPIssKpbC-ZejFcSrjBemR" target="_blank" rel="noopener noreferrer" class="nav-icon" title="YouTube">

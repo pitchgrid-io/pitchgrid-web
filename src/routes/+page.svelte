@@ -463,6 +463,7 @@
 		</p>
 		<div class="hero-cta-group">
 			<a href="https://node.audio/products/pitchgrid" class="hero-cta" target="_blank">Get PitchGrid Plugin</a>
+			<a href="/info/plugin-user-manual" class="hero-cta-secondary">Learn More</a>
 		</div>
 		<div class="hero-screenshot">
 			<img src="/docs/images/PitchGridPluginUI.png" alt="PitchGrid Plugin UI" />
