@@ -247,7 +247,6 @@
 					<div class="dropdown-content">
 						<a href="/diatonic">Diatonic PitchGrid</a>
 						<a href="/scalemapper">Scale Mapper</a>
-						<a href="/mosmapper-piano">MOS Piano</a>
 						<a href="/helix-metronome">Helix Metronome</a>
 						<a href="https://library.vcvrack.com/PitchGrid/MicroExquis" target="_blank">MicroExquis (VCV)</a>
 					</div>
@@ -282,7 +281,6 @@
 					<ul>
 						<li><a href="/diatonic">Diatonic PitchGrid</a></li>
 						<li><a href="/scalemapper">Scale Mapper</a></li>
-						<li><a href="/mosmapper-piano">MOS Piano</a></li>
 						<li><a href="/helix-metronome">Helix Metronome</a></li>
 						<li><a href="https://library.vcvrack.com/PitchGrid/MicroExquis" target="_blank">MicroExquis</a></li>
 					</ul>
