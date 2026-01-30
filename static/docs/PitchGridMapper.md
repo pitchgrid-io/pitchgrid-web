@@ -16,11 +16,8 @@ PitchGrid Mapper sits between your physical controller and the PitchGrid plugin 
 
 This means any supported controller becomes a microtonal instrument — playing the exact scale you've dialed in with PitchGrid, with consistent fingering patterns across all keys.
 
-```
-Controller → MIDI In → PitchGrid Mapper → MIDI Out (Virtual) → PitchGrid VST → DAW
-                              ↑
-                    OSC scale data from PitchGrid plugin
-```
+![PG_Mapper_Overview](/docs/images/PG_Mapper_Overview.png)
+
 
 ## Supported Controllers
 
@@ -28,7 +25,7 @@ Controller → MIDI In → PitchGrid Mapper → MIDI Out (Virtual) → PitchGrid
 - **LinnStrument 128** — Roger Linn's expressive grid controller
 - **Exquis** — Intuitive Instruments' isomorphic MPE controller
 - **Launchpad Mini MK3** — Novation's affordable pad grid
-- **Lumatone** — the 280-key isomorphic keyboard
+- **Lumatone** — Professional grade Bosanquet layout controller [Untested]
 
 Additional controllers can be added through simple YAML configuration files. If your controller isn't listed, you can define its grid dimensions, MIDI mapping, and physical layout to get it working.
 
@@ -71,39 +68,25 @@ The 280-key Lumatone is the ultimate canvas for PitchGrid scales. With its enorm
 ### Installation
 
 1. Download the latest release from [GitHub](https://github.com/pitchgrid-io/pitchgrid-mapper/releases)
-2. Run the application — a virtual MIDI device called "PitchGrid Mapper" is created automatically
-3. In your DAW, set MIDI input to "PitchGrid Mapper"
-4. Route that to the PitchGrid plugin
-5. In the PitchGrid plugin, enable OSC output to `localhost:9000`
+2. On Windows, create a virtual MIDI device called "PitchGrid Mapper" (automatically created on Mac)
+3. Run the application. (On Mac, a virtual MIDI device called "PitchGrid Mapper" is created automatically)
+4. In your DAW, set MIDI input to "PitchGrid Mapper"
+5. Route that to the PitchGrid plugin
+6. In the PitchGrid plugin, enable OSC output
+7. Connect your controller via USB
+8. Choose your controller from the Controllers dropdown 
 
-### Using the Web UI
+### Using the PitchGrid Isomorphic Controller Mapper UI
 
-Once PitchGrid Mapper is running, open your browser to `http://localhost:8080`. The web UI shows:
+Once PitchGrid Mapper is running:
 
 - **Controller selection** — choose your connected controller
 - **Layout type** — switch between isomorphic, string-like, and piano-like
-- **Real-time visualization** — see how your scale maps onto the controller's grid
+- **Labels** — Select which type of labels should be shown on the pads in the UI
 - **Transformation controls** — shift, skew, rotate, and reflect the layout
 - **Connection status** — virtual MIDI and OSC connection indicators
 
 Changes apply in real-time — adjust the layout while playing and hear the results immediately.
-
-## Adding Custom Controllers
-
-If your controller isn't supported out of the box, you can add it by creating a YAML configuration file. Define the device name, grid dimensions, row structure, and physical layout:
-
-```yaml
-DeviceName: "MyController"
-MIDIDeviceName: "MyController MIDI"
-NumRows: 8
-RowLengths: [16, 16, 16, 16, 16, 16, 16, 16]
-HorizonToRowAngle: 0.0
-RowToColAngle: 90.0
-xSpacing: 19.0
-ySpacing: 19.0
-```
-
-See the existing controller configs in the [GitHub repository](https://github.com/pitchgrid-io/pitchgrid-mapper) for complete examples.
 
 ## Open Source
 
