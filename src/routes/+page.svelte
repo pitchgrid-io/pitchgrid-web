@@ -1005,7 +1005,7 @@
 				</a>
 				<h4>Exquis PitchGrip ZyKlop</h4>
 				<p style="color: #b0b0b0; margin-bottom: 1rem;">
-					User video by DEZ — PitchGrid with the Exquis.
+					User video by Bobox (@Beaubox) — PitchGrid with the Exquis.
 				</p>
 			</div>
 
@@ -1015,7 +1015,7 @@
 				</a>
 				<h4>Bohlen Pierce Comp 01</h4>
 				<p style="color: #b0b0b0; margin-bottom: 1rem;">
-					User video by DEZ — a Bohlen–Pierce sketch with PitchGrid.
+					User video by Bobox (@Beaubox) — a Bohlen–Pierce sketch with PitchGrid.
 				</p>
 			</div>
 
