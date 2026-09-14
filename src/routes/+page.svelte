@@ -944,6 +944,10 @@
 							Album: various releases — <a href="https://beatsbasteln.bandcamp.com/track/tranquil-9-5in17" target="_blank">Bandcamp</a>
 						</li>
 						<li>
+							<strong>Peter Daly & Simon O'Rorke</strong> — "Well-Adjusted"<br>
+							Duo improvisation — viola and Haken Continuum in Slendric[11] — <a href="https://simonororke.bandcamp.com/track/well-adjusted" target="_blank">Bandcamp</a>
+						</li>
+						<li>
 							<strong>Forrest Fang</strong> — "Harmonic Perch"<br>
 							Album: *Radiance and the Receding of Light* (Projekt Records) — <a href="https://projektrecords.bandcamp.com/track/harmonic-perch" target="_blank">Bandcamp</a>
 						</li>
@@ -958,6 +962,10 @@
 						<li>
 							<strong>Peter Jung</strong> — PitchGrid demos & experiments<br>
 							Playlist: <a href="https://soundcloud.com/peter-jung-119529179/sets/pitchgrid" target="_blank">SoundCloud</a>
+						</li>
+						<li>
+							<strong>DEZ</strong> — Pianoteq A/B demos (12-TET vs just 3rds and 5ths)<br>
+							Modartt forum — <a href="https://forum.modartt.com/viewtopic.php?id=13444" target="_blank">LISTEN UP ! Or down ...</a>
 						</li>
 					</ul>
 				</div>
@@ -988,6 +996,26 @@
 				<h4>Featured Review: Beats Basteln</h4>
 				<p style="color: #b0b0b0; margin-bottom: 1rem;">
 					"This plugin is insane." — Florian Mrugalla
+				</p>
+			</div>
+
+			<div class="video-item">
+				<a href="https://youtu.be/-yBFVJDSM60" target="_blank">
+					<img src="https://img.youtube.com/vi/-yBFVJDSM60/hqdefault.jpg" alt="Exquis PitchGrip ZyKlop" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;" />
+				</a>
+				<h4>Exquis PitchGrip ZyKlop</h4>
+				<p style="color: #b0b0b0; margin-bottom: 1rem;">
+					User video by DEZ — PitchGrid with the Exquis.
+				</p>
+			</div>
+
+			<div class="video-item">
+				<a href="https://youtu.be/ER9FxecY60A" target="_blank">
+					<img src="https://img.youtube.com/vi/ER9FxecY60A/hqdefault.jpg" alt="Bohlen Pierce Comp 01" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;" />
+				</a>
+				<h4>Bohlen Pierce Comp 01</h4>
+				<p style="color: #b0b0b0; margin-bottom: 1rem;">
+					User video by DEZ — a Bohlen–Pierce sketch with PitchGrid.
 				</p>
 			</div>
 
