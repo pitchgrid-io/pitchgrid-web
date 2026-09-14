@@ -1058,8 +1058,15 @@
 			<div class="event-card">
 				<h4>PitchGrid Workshop at Untwelving, Munich</h4>
 				<p>
-					"Touch the Microtones" — open PitchGrid workshop at Campus #28 "Untwelving" 
-					at the Münchner Kammerspiele, May 23rd, 2026, 15:00–19:00.
+					"Touch the Microtones" — open PitchGrid workshop at Campus #28 "Untwelving"
+					at the Münchner Kammerspiele, May 23rd, 2026. Participants included people new to
+					microtonality, and some new to music. Workshop results were presented afterwards
+					in the Habibi Kiosk.
+				</p>
+				<p>
+					ARTE Tracks later covered the convention in
+					<a href="https://www.youtube.com/watch?v=DvewO_qBn4Y" target="_blank">Mikrotonale Musik: Revolution der westlichen Musikwelt</a>.
+					PitchGrid appears only as a brief glimpse — not named in the film — but the piece is a good window onto the event.
 				</p>
 				<a href="https://www.muenchner-kammerspiele.de/de/programm/50165-campus-28-untwelving" target="_blank">
 					See Program
