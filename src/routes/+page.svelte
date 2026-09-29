@@ -914,7 +914,12 @@
 				<a href="https://github.com/peterjungx/pgrhythm" target="_blank" class="btn">View on GitHub</a>
 			</div>
 
-			
+			<div class="feature-card">
+				<span class="feature-icon">🎹</span>
+				<h3>Continuum Bridge</h3>
+				<p>Simon O'Rorke's app that sends PitchGrid tunings to a Haken Continuum. Windows and macOS.</p>
+				<a href="https://github.com/SimonORorke/PitchGrid-Continuum-Bridge" target="_blank" class="btn">View on GitHub</a>
+			</div>
 		</div>
 	</section>
 
