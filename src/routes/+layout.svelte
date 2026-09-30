@@ -434,6 +434,8 @@ import Newsletter from '$lib/components/Newsletter.svelte';
 						<a href="/scalemapper">Scale Mapper</a>
 						<a href="/helix-metronome">Helix Metronome</a>
 						<a href="https://library.vcvrack.com/PitchGrid/MicroExquis" target="_blank">MicroExquis (VCV)</a>
+						<a href="https://github.com/peterjungx/pgrhythm" target="_blank">PGRhythm</a>
+						<a href="https://github.com/SimonORorke/PitchGrid-Continuum-Bridge" target="_blank">Continuum Bridge</a>
 					</div>
 				</li>
 				<li class="dropdown">
@@ -481,6 +483,8 @@ import Newsletter from '$lib/components/Newsletter.svelte';
 						<li><a href="/scalemapper">Scale Mapper</a></li>
 						<li><a href="/helix-metronome">Helix Metronome</a></li>
 						<li><a href="https://library.vcvrack.com/PitchGrid/MicroExquis" target="_blank">MicroExquis</a></li>
+						<li><a href="https://github.com/peterjungx/pgrhythm" target="_blank">PGRhythm</a></li>
+						<li><a href="https://github.com/SimonORorke/PitchGrid-Continuum-Bridge" target="_blank">Continuum Bridge</a></li>
 					</ul>
 				</div>
 				
