@@ -31,6 +31,8 @@ export const MOONBASE_OPTIONS = {
     toolbar: { enabled: false },
     // 'always' = full-page redirect to the hosted checkout on every device.
     checkout: { redirect: 'always' },
+    // No Moonbase sale banners/popups on the site; we present sales ourselves.
+    promotions: { enabled: false },
     theme: {
         dark: true,
         // background only accepts 'white' | 'gray'; in dark mode 'white' is the
