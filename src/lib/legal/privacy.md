@@ -1,6 +1,6 @@
 # Privacy Policy
 
-_Last updated: 24 August 2026_
+_Last updated: 8 October 2026_
 
 This policy explains how **Bayes GmbH** ("**Bayes**", "**we**", "**us**") processes personal data when you use **pitchgrid.io** and related PitchGrid services — including downloads, the mailing list, and plugin licensing.
 
@@ -49,11 +49,11 @@ We also use **Vercel Web Analytics** (Vercel Inc.) for cookieless, aggregated tr
 
 ### Mailing list
 
-If you subscribe, **Brevo** (Sendinblue SAS, France) stores your email address and, if you provide it, your name. Subscription is sent via `POST /api/subscribe`. Legal basis: Art. 6(1)(a) consent. We keep the data until you unsubscribe or ask us to delete it. Every mail includes an unsubscribe link. You can also email [peter@pitchgrid.io](mailto:peter@pitchgrid.io).
+If you subscribe (including to get the free Tuning Pack), **Brevo** (Sendinblue SAS, France) stores your email address and, if you provide them, your name, whether you asked for updates on the PitchGrid CK1 hardware, and which signup form you used. Subscription is sent via `POST /api/subscribe`. We use **double opt-in**: Brevo sends you a confirmation email, and you are only added to the list after you click its link. Brevo records the time of signup and confirmation as proof of consent. Legal basis: Art. 6(1)(a) consent. We keep the data until you unsubscribe or ask us to delete it. Every mail includes an unsubscribe link. You can also email [peter@pitchgrid.io](mailto:peter@pitchgrid.io).
 
 ### Shop and licences
 
-Purchases and licence keys are handled by **Moonbase** ([https://pitchgrid.moonbase.sh](https://pitchgrid.moonbase.sh)). Moonbase processes accounts, payments, licence keys, and activations. Legal basis: Art. 6(1)(b). Moonbase’s own privacy policy applies to checkout. We receive the fact of a purchase and the licence email so we can support you.
+Purchases and licence keys are handled by **Moonbase** ([https://pitchgrid.moonbase.sh](https://pitchgrid.moonbase.sh)). Moonbase processes accounts, payments, licence keys, and activations. Legal basis: Art. 6(1)(b). If you arrive through a link with campaign parameters (for example `utm_source=newsletter`), we pass those parameters on to the Moonbase checkout, so we can see which campaign led to a purchase. They identify the campaign, not you. Nothing is stored on your device for this. Legal basis: Art. 6(1)(f). Moonbase’s own privacy policy applies to checkout. We receive the fact of a purchase and the licence email so we can support you.
 
 ### Plugin activation
 

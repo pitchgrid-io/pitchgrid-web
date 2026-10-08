@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { MOONBASE_BUY_URL } from '$lib/shop/moonbase';
+	import { page } from '$app/stores';
+	import { PRICE_LABEL, PRICE_LABEL_ALL, PRICE_NOTE, TRIAL_DAYS } from '$lib/shop/pricing';
+	import { carryUtm } from '$lib/actions/carryUtm';
+	import TuningPackSignup from '$lib/components/TuningPackSignup.svelte';
 </script>
 
 <style>
@@ -12,7 +15,7 @@
 	/* Hero Section */
 	.hero {
 		background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1419 100%);
-		padding: 6rem 0 4rem;
+		padding: 4rem 0 4rem;
 		text-align: center;
 		position: relative;
 		overflow: hidden;
@@ -49,7 +52,7 @@
 	.hero-subtext {
 		font-size: 1.25rem;
 		color: #b0b0b0;
-		margin-bottom: 2.5rem;
+		margin-bottom: 1rem;
 		max-width: 700px;
 		margin-left: auto;
 		margin-right: auto;
@@ -73,9 +76,43 @@
 	.hero-bridge {
 		font-size: 1.1rem;
 		color: rgba(255, 255, 255, 0.7);
-		margin-top: 1.5rem;
+		margin-top: 0;
 		margin-bottom: 0.5rem;
 		text-align: center;
+	}
+
+	.hero-fineprint {
+		font-size: 0.9rem;
+		color: rgba(255, 255, 255, 0.55);
+		margin: 1rem auto 2.5rem;
+		max-width: 640px;
+		line-height: 1.6;
+	}
+
+	.hero-fineprint a {
+		color: rgba(255, 171, 0, 0.85);
+	}
+
+	.final-cta {
+		text-align: center;
+	}
+
+	.final-cta .hero-cta-group {
+		margin-bottom: 1rem;
+	}
+
+	.final-cta .hero-fineprint {
+		margin-bottom: 3rem;
+	}
+
+	.trial-reassure {
+		text-align: center;
+		color: #b0b0b0;
+		margin-top: 1.5rem;
+	}
+
+	.trial-reassure a {
+		color: #FFAB00;
 	}
 
 	.hero-bridge em {
@@ -653,6 +690,17 @@
 		<p class="hero-subtext">
 			The tonal structure of Western music is two-dimensional. The piano hides this. Standard notation encodes it. PitchGrid <em>reveals</em> it.
 		</p>
+		<p class="hero-bridge">Explore this interactively with the <em>PitchGrid Plugin</em></p>
+		<div class="hero-cta-group">
+			<a href="/download" class="hero-cta" use:carryUtm={$page.url.search} data-plausible-label="Trial Download">Try free for {TRIAL_DAYS} days</a>
+			<a href="/buy" class="hero-cta-secondary" use:carryUtm={$page.url.search} data-plausible-label="Buy PitchGrid">Buy {PRICE_LABEL} — one-time license</a>
+		</div>
+		<p class="hero-fineprint">
+			VST3 · AU · CLAP Note Effect for macOS &amp; Windows · full features in the trial, no card ·
+			{PRICE_LABEL_ALL} perpetual license ·
+			<a href="https://github.com/pitchgrid-io/pitchgrid-mapper/releases" target="_blank" rel="noopener" data-plausible-label="Download Mapper">PitchGrid Mapper is free</a>
+			{#if PRICE_NOTE}<br />{PRICE_NOTE}{/if}
+		</p>
 		<div class="hero-screenshot">
 			<video autoplay muted loop playsinline disablepictureinpicture
 				poster="/docs/images/PitchGridPluginUI.png"
@@ -661,12 +709,6 @@
 				<source src="/pitchgrid-anim-web.mp4" type="video/mp4" />
 				<img src="/docs/images/PitchGridPluginUI.png" alt="PitchGrid Plugin" />
 			</video>
-		</div>
-		<p class="hero-bridge">Explore this interactively with the <em>PitchGrid Plugin</em></p>
-		<div class="hero-cta-group">
-			<a href="/download" class="hero-cta" data-plausible-label="Trial Download">Try Free</a>
-			<a href={MOONBASE_BUY_URL} class="hero-cta-secondary" target="_blank" rel="noopener" data-plausible-label="Buy PitchGrid">Get a license — 42 €/$/£</a>
-			<a href="https://github.com/pitchgrid-io/pitchgrid-mapper/releases" class="hero-cta-secondary" target="_blank" data-plausible-label="Download Mapper">Mapper (free)</a>
 		</div>
 	</div>
 </section>
@@ -746,7 +788,7 @@
 					Modes, transposition, chord relationships: they all still work. 
 					Maps to the piano keyboard and DAW piano roll — bridging new tunings with your existing tools.
 				</p>
-				<a href="/download" class="btn" data-plausible-label="Get the Plugin">Get the Plugin</a>
+				<a href="/download" class="btn" use:carryUtm={$page.url.search} data-plausible-label="Get the Plugin">Get the Plugin</a>
 				<a href="/info/plugin-user-manual" class="btn btn-secondary">User Manual</a>
 			</div>
 			
@@ -843,6 +885,10 @@
 				</ul>
 			</div>
 		</div>
+		<p class="trial-reassure">
+			Not sure yet? <a href="/download" use:carryUtm={$page.url.search} data-plausible-label="Trial Download">Try it free for {TRIAL_DAYS} days</a>,
+			with full features and no card.
+		</p>
 	</section>
 
 	<!-- Building on Tradition -->
@@ -862,7 +908,7 @@
 			<p>
 				<strong>The next chapter of tonal music is waiting to be written. Maybe you'll write it.</strong>
 			</p>
-			<a href="/download" class="hero-cta" data-plausible-label="Start Exploring">Start Exploring</a>
+			<a href="/download" class="hero-cta" use:carryUtm={$page.url.search} data-plausible-label="Start Exploring">Start Exploring</a>
 		</div>
 	</section>
 
@@ -1159,6 +1205,23 @@
 				<br>Stephen Weigel's invaluable podcast on the current state of microtonality.
 			</li>
 		</ul>
+	</section>
+
+	<!-- Final CTA + Tuning Pack signup -->
+	<section class="section final-cta">
+		<h2>Hear It for Yourself</h2>
+		<p class="section-intro">
+			Load PitchGrid in front of your favourite synth, pick a preset, turn the knobs.
+		</p>
+		<div class="hero-cta-group">
+			<a href="/download" class="hero-cta" use:carryUtm={$page.url.search} data-plausible-label="Trial Download">Try free for {TRIAL_DAYS} days</a>
+			<a href="/buy" class="hero-cta-secondary" use:carryUtm={$page.url.search} data-plausible-label="Buy PitchGrid">Buy {PRICE_LABEL} — one-time license</a>
+		</div>
+		<p class="hero-fineprint">
+			macOS &amp; Windows · VST3 · AU · CLAP · full features in the trial, no card
+			{#if PRICE_NOTE}<br />{PRICE_NOTE}{/if}
+		</p>
+		<TuningPackSignup source="home" />
 	</section>
 
 	<!-- Contact Section -->

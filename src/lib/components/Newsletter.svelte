@@ -17,13 +17,13 @@
 			const res = await fetch('/api/subscribe', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email, name })
+				body: JSON.stringify({ email, name, consent, source: 'footer' })
 			});
 
 			const data = await res.json();
 
 			if (data.success) {
-				message = data.message || 'Thank you for subscribing!';
+				message = data.message || 'Almost there — check your inbox to confirm.';
 				success = true;
 				email = '';
 				name = '';
@@ -41,7 +41,7 @@
 
 <div class="newsletter">
 	<h3>Stay updated</h3>
-	<p class="intro">Join the PitchGrid mailing list for updates, new tools, and events.</p>
+	<p class="intro">Join the PitchGrid mailing list for updates, new tools, and events. Confirm by email and get the free <a href="/tuning-pack">Tuning Pack</a>.</p>
 	
 	<form on:submit|preventDefault={handleSubmit}>
 		<input 

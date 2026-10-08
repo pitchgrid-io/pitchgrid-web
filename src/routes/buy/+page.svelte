@@ -1,19 +1,25 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { MOONBASE_BUY_URL } from '$lib/shop/moonbase';
+    import { MOONBASE_BUY_URL, moonbaseBuyUrl } from '$lib/shop/moonbase';
+    import { PRICE_LABEL_ALL, TRIAL_DAYS } from '$lib/shop/pricing';
 
-    const title = 'PitchGrid Plugin license — 42 €/$/£';
+    const title = `PitchGrid Plugin license — ${PRICE_LABEL_ALL}`;
     const description =
-        'A license for the PitchGrid Plugin. 42 €/$/£. 14-day trial in the installer. Checkout via Moonbase.';
+        `A license for the PitchGrid Plugin. ${PRICE_LABEL_ALL}. ${TRIAL_DAYS}-day trial in the installer. Checkout via Moonbase.`;
     const pageUrl = 'https://pitchgrid.io/buy';
     const ogImage = 'https://pitchgrid.io/docs/images/PitchGridPluginUI.png';
 
     let continuing = false;
+    // This page is prerendered, so the query string is only known in the browser.
+    // utm_* params (e.g. /buy?utm_source=newsletter) are forwarded to Moonbase,
+    // which records them on the order.
+    let checkoutUrl = MOONBASE_BUY_URL;
 
     onMount(() => {
+        checkoutUrl = moonbaseBuyUrl(window.location.search);
         continuing = true;
         const t = window.setTimeout(() => {
-            window.location.assign(MOONBASE_BUY_URL);
+            window.location.assign(checkoutUrl);
         }, 500);
         return () => window.clearTimeout(t);
     });
@@ -39,13 +45,14 @@
     <section class="card">
         <p class="eyebrow">PitchGrid Plugin</p>
         <h1>PitchGrid Plugin license</h1>
-        <p class="price">42 €/$/£</p>
+        <p class="price">{PRICE_LABEL_ALL}</p>
         <p class="lead">
-            A license for the PitchGrid Plugin. The 14-day trial is in the installer — download, run, and play.
+            One-time payment, perpetual license for the PitchGrid Plugin (macOS and Windows).
+            Not sure yet? The {TRIAL_DAYS}-day trial is in the installer: full features, no card.
         </p>
         <a
             class="buy-cta"
-            href={MOONBASE_BUY_URL}
+            href={checkoutUrl}
             data-plausible-label="Get a license"
         >Get a license</a>
         {#if continuing}
