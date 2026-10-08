@@ -1,6 +1,12 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { MOONBASE_BUY_URL, moonbaseBuyUrl } from '$lib/shop/moonbase';
+    import {
+        MOONBASE_BUY_URL,
+        MOONBASE_LOGIN_URL,
+        MOONBASE_RESET_URL,
+        moonbaseBuyUrl
+    } from '$lib/shop/moonbase';
+    import { moonbaseIntent, startPurchase } from '$lib/shop/moonbaseEmbed';
     import { PRICE_LABEL_ALL, PRICE_NOTE, TRIAL_DAYS } from '$lib/shop/pricing';
 
     // Pre-checkout page. 32 of 39 abandoned Moonbase checkouts left on step 1
@@ -15,14 +21,16 @@
     const pageUrl = 'https://pitchgrid.io/buy';
     const ogImage = 'https://pitchgrid.io/docs/images/PitchGridPluginUI.png';
 
-    const MOONBASE_LOGIN_URL = 'https://pitchgrid.moonbase.sh/log-in';
-    const MOONBASE_RESET_URL = 'https://pitchgrid.moonbase.sh/forgot-password';
     const MOONBASE_BUYER_TERMS_URL =
         'https://help.moonbase.sh/articles/3131239-general-terms-and-conditions-for-buyers';
 
     // This page is prerendered, so the query string is only known in the browser.
     // utm_* params (e.g. /buy?utm_source=newsletter) are forwarded to Moonbase,
     // which records them on the order. Without JS the plain checkout URL works.
+    // With JS, the click starts the purchase through the Moonbase embed (which
+    // reads the same utm_* params from this page's URL and attaches them to the
+    // order) and redirects to the hosted checkout; on any failure it falls back
+    // to this UTM-forwarded link.
     let checkoutUrl = MOONBASE_BUY_URL;
 
     onMount(() => {
@@ -55,7 +63,12 @@
         <p class="lead">One-time payment. Perpetual license, not a subscription.</p>
         {#if PRICE_NOTE}<p class="price-note">{PRICE_NOTE}</p>{/if}
 
-        <a class="buy-cta" href={checkoutUrl} data-plausible-label="Continue to checkout">Continue to checkout</a>
+        <a
+            class="buy-cta"
+            href={checkoutUrl}
+            on:click={(event) => startPurchase(event, checkoutUrl)}
+            data-plausible-label="Continue to checkout">Continue to checkout</a
+        >
 
         <p class="trial">
             Not sure yet? The {TRIAL_DAYS}-day free trial is built into the installer, no card needed.
@@ -95,8 +108,8 @@
             <h2>Already own PitchGrid? Don't buy again.</h2>
             <p>
                 Your license is already on your Moonbase account.
-                <a href={MOONBASE_LOGIN_URL}>Sign in</a> with the email on your old license; never set a password?
-                <a href={MOONBASE_RESET_URL}>Reset it</a>.
+                <a href={MOONBASE_LOGIN_URL} use:moonbaseIntent={'sign_in'}>Sign in</a> with the email on your old license; never set a password?
+                <a href={MOONBASE_RESET_URL} use:moonbaseIntent={'forgot_password'}>Reset it</a>.
             </p>
         </div>
 

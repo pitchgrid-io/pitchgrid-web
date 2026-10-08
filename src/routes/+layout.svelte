@@ -4,6 +4,8 @@
 	import { DiscordLogo, GithubLogo } from 'radix-icons-svelte';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 import Newsletter from '$lib/components/Newsletter.svelte';
+	import { MOONBASE_LOGIN_URL } from '$lib/shop/moonbase';
+	import { initMoonbase, moonbaseIntent } from '$lib/shop/moonbaseEmbed';
 
 	injectAnalytics({ mode: 'auto' });
 
@@ -98,6 +100,10 @@ import Newsletter from '$lib/components/Newsletter.svelte';
 	}
 
 	onMount(() => {
+		// Moonbase embedded storefront (sign-in, account, downloads, checkout hand-off).
+		// Client-only, so SSR and prerendering are unaffected.
+		initMoonbase();
+
 		const handleDocumentClick = (event: MouseEvent) => {
 			const target = event.target;
 			if (!(target instanceof Element)) return;
@@ -223,6 +229,16 @@ import Newsletter from '$lib/components/Newsletter.svelte';
 	.nav-links a:hover {
 		color: #FFAB00;
 		text-decoration: none;
+	}
+
+	/* Moonbase toggles `hidden` on the account links (data-moonbase-if). */
+	.nav-links a[hidden] {
+		display: none;
+	}
+
+	.nav-account a {
+		font-size: 0.95rem;
+		color: #c8c8c8;
 	}
 
 	.nav-icon-links {
@@ -450,6 +466,11 @@ import Newsletter from '$lib/components/Newsletter.svelte';
 				</li>
 				<li><a href="/research">Research</a></li>
 				<li><a href="/download" data-plausible-label="Plugin Nav">Plugin</a></li>
+				<li class="nav-account">
+					<!-- Moonbase embed: opens its sign-in / account panel; href is the no-JS fallback. -->
+					<a href={MOONBASE_LOGIN_URL} data-moonbase-if="!user" use:moonbaseIntent={'sign_in'} data-plausible-label="Sign in Nav">Sign in</a>
+					<a href={MOONBASE_LOGIN_URL} hidden data-moonbase-if="user" use:moonbaseIntent={'view_account'} data-plausible-label="Account Nav">Account</a>
+				</li>
 				<li class="nav-icon-links">
 					<a href="https://www.youtube.com/playlist?list=PLY4_jglyyynCPIssKpbC-ZejFcSrjBemR" target="_blank" rel="noopener noreferrer" class="nav-icon" title="YouTube" data-plausible-label="YouTube Nav">
 						<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.546 12 3.546 12 3.546s-7.505 0-9.377.504A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.504 9.376.504 9.376.504s7.505 0 9.377-.504a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>

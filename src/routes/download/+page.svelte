@@ -3,6 +3,8 @@
     import { page } from '$app/stores';
     import { PRICE_LABEL, PRICE_LABEL_ALL, PRICE_NOTE, TRIAL_DAYS } from '$lib/shop/pricing';
     import { carryUtm } from '$lib/actions/carryUtm';
+    import { MOONBASE_LOGIN_URL, MOONBASE_RESET_URL } from '$lib/shop/moonbase';
+    import { moonbaseIntent } from '$lib/shop/moonbaseEmbed';
     import TuningPackSignup from '$lib/components/TuningPackSignup.svelte';
 
     export let data: PageData;
@@ -77,8 +79,8 @@
         <a class="buy-cta" href="/buy" use:carryUtm={$page.url.search} data-plausible-label="Get a license">Buy a license — {PRICE_LABEL}, one-time</a>
         {#if PRICE_NOTE}<p class="price-note">{PRICE_NOTE}</p>{/if}
         <p class="indiekey">
-            Existing Indiekey customers: sign in with the email on the old license.
-            Set a password via <a href="https://pitchgrid.moonbase.sh/forgot-password">Forgot password</a> if you have not used Moonbase.
+            Existing Indiekey customers: <a href={MOONBASE_LOGIN_URL} use:moonbaseIntent={'sign_in'}>sign in</a> with the email on the old license.
+            Set a password via <a href={MOONBASE_RESET_URL} use:moonbaseIntent={'forgot_password'}>Forgot password</a> if you have not used Moonbase.
         </p>
         <p class="legal-links">
             <a href="/plugin-eula">EULA</a>

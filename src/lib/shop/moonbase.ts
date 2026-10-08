@@ -1,5 +1,15 @@
+/** Our Moonbase account (hosted portal, and the URL the embedded storefront is set up with). */
+export const MOONBASE_STOREFRONT_URL = 'https://pitchgrid.moonbase.sh';
+
+/** Moonbase product id of the plugin (verified against /api/customer/storefront). */
+export const MOONBASE_PRODUCT_ID = 'pitchgrid-plugin';
+
 /** Hosted Moonbase checkout. Shopify is gone. */
 export const MOONBASE_BUY_URL = 'https://pitchgrid.moonbase.sh/buy/pitchgrid-plugin';
+
+/** Hosted portal pages, used as no-JS fallbacks for the embedded storefront's panels. */
+export const MOONBASE_LOGIN_URL = 'https://pitchgrid.moonbase.sh/log-in';
+export const MOONBASE_RESET_URL = 'https://pitchgrid.moonbase.sh/forgot-password';
 
 // Price/trial wording lives in ./pricing.ts; re-exported for convenience.
 export { PRICE_AMOUNT, PRICE_LABEL, PRICE_LABEL_ALL, TRIAL_DAYS } from './pricing';
