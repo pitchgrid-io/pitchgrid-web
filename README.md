@@ -47,7 +47,7 @@ https://pitchgrid.io/download?utm_source=youtube&utm_medium=video&utm_campaign=m
 https://pitchgrid.io/buy?utm_source=newsletter&utm_medium=email&utm_campaign=2026-10
 ```
 
-`utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content` and `utm_referrer` are carried from the landing page onto the Try/Buy buttons (no cookies or storage) and `/buy` forwards them to the Moonbase checkout, which records them on each order and can run UTM-only discounts. Plausible shows the same params on page views.
+`utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content` and `utm_referrer` are carried from the landing page onto the Try/Buy buttons (no cookies or storage) and the "Continue to checkout" button on `/buy` (a pre-checkout page, no auto-forward) passes them to the Moonbase checkout, which records them on each order and can run UTM-only discounts. Plausible shows the same params on page views.
 
 ## Acknowledgements
 
