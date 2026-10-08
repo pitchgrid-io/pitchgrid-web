@@ -10,6 +10,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "dev-x": "vite dev --host --port 3000",
     "test:consent": "node --test tests/",
+    "test:subscribe": "node --test tests/",
     "backfill:owners:dry-run": "node scripts/backfill-owners-dryrun.mjs"
   },
   "devDependencies": {

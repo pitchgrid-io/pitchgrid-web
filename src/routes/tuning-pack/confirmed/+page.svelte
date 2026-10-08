@@ -5,8 +5,10 @@
 	const PACK_URL = '/downloads/pitchgrid-tuning-pack.zip';
 
 	onMount(() => {
-		const plausible = (window as Window & { plausible?: (e: string) => void }).plausible;
-		plausible?.('Tuning Pack Confirmed');
+		// via=email: clicked the (optional) confirmation email; otherwise came from the signup form.
+		const via = new URLSearchParams(location.search).get('via') === 'email' ? 'email' : 'form';
+		const plausible = (window as Window & { plausible?: (e: string, o?: object) => void }).plausible;
+		plausible?.('Tuning Pack Confirmed', { props: { via } });
 	});
 </script>
 
@@ -17,7 +19,7 @@
 
 <main class="confirmed">
 	<section class="card">
-		<p class="eyebrow">Subscription confirmed</p>
+		<p class="eyebrow">You're on the list</p>
 		<h1>Thanks, you're in</h1>
 		<p class="lead">Here is your PitchGrid Tuning Pack: 19 curated Scala tunings, keyboard gamuts, 171 MOS scales and a guide to 10 tunings.</p>
 		<a class="primary" href={PACK_URL} download data-plausible-label="Download Tuning Pack">Download the Tuning Pack (.zip)</a>

@@ -1,36 +1,46 @@
 <script lang="ts">
 	/**
-	 * Lead-magnet signup: free PitchGrid Tuning Pack in exchange for a
-	 * double-opt-in newsletter subscription (Brevo, via /api/subscribe).
-	 * The pack link is only shown on /tuning-pack/confirmed after the DOI click.
+	 * Lead-magnet signup: free PitchGrid Tuning Pack for joining the mailing list
+	 * (Brevo, via /api/subscribe). Submitting the form is the consent and adds the
+	 * address right away; the success message links the pack page.
 	 */
+	import { BUTTON_TUNING_PACK, CONSENT_TEXT, CONSENT_TEXT_VERSION } from '$lib/consent/signupCopy';
+
 	export let source: 'home' | 'download' | 'footer' | 'other' = 'other';
 	export let compact = false;
 
 	let email = '';
-	let consent = false;
 	let ck1 = false;
 	let website = ''; // honeypot
 	let loading = false;
 	let success = false;
 	let message = '';
+	let packUrl = '';
 
 	const id = `tp-${source}`;
 
 	async function submit() {
-		if (!email || !consent || loading) return;
+		if (!email || loading) return;
 		loading = true;
 		message = '';
 		try {
 			const res = await fetch('/api/subscribe', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email, consent, ck1, source, website })
+				body: JSON.stringify({
+					email,
+					ck1,
+					source,
+					website,
+					consentVersion: CONSENT_TEXT_VERSION,
+					page: location.origin + location.pathname
+				})
 			});
 			const data = await res.json().catch(() => ({}));
 			if (res.ok && data.success) {
 				success = true;
 				message = data.message;
+				packUrl = data.packUrl || '';
 				const plausible = (window as Window & { plausible?: (e: string, o?: object) => void }).plausible;
 				plausible?.('Tuning Pack Signup', { props: { source, ck1: String(ck1) } });
 			} else {
@@ -56,7 +66,10 @@
 	</div>
 
 	{#if success}
-		<p class="tp-success" role="status">{message}</p>
+		<p class="tp-success" role="status">
+			{message}
+			{#if packUrl}<a href={packUrl}>Download the Tuning Pack</a>{/if}
+		</p>
 	{:else}
 		<form class="tp-form" on:submit|preventDefault={submit} novalidate>
 			<div class="tp-row">
@@ -70,18 +83,11 @@
 					required
 					disabled={loading}
 				/>
-				<button type="submit" disabled={loading || !email || !consent}>
-					{loading ? 'Sending…' : 'Get the Tuning Pack'}
+				<button type="submit" disabled={loading || !email}>
+					{loading ? 'Sending…' : BUTTON_TUNING_PACK}
 				</button>
 			</div>
-			<label class="tp-check">
-				<input type="checkbox" bind:checked={consent} required disabled={loading} />
-				<span>
-					Email me the Tuning Pack and occasional PitchGrid news from Bayes GmbH (about 1–2 emails a month).
-					I'll confirm by email and can unsubscribe at any time.
-					<a href="/privacy">Privacy policy</a>
-				</span>
-			</label>
+			<p class="tp-consent">{CONSENT_TEXT} <a href="/privacy">Privacy policy</a></p>
 			<label class="tp-check">
 				<input type="checkbox" bind:checked={ck1} disabled={loading} />
 				<span>Also send me updates on the <strong>PitchGrid CK1</strong> hardware controller (waitlist only, no deposit).</span>
@@ -197,7 +203,14 @@
 		flex-shrink: 0;
 		accent-color: #ffab00;
 	}
-	.tp-check a {
+	.tp-consent {
+		margin: 0;
+		font-size: 0.85rem;
+		line-height: 1.45;
+		color: #b8b8b8;
+	}
+	.tp-consent a,
+	.tp-success a {
 		color: #ffab00;
 	}
 	.tp-check strong {

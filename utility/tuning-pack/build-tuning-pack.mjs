@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Builds static/downloads/pitchgrid-tuning-pack.zip — the free lead-magnet pack
- * delivered after a newsletter double opt-in.
+ * delivered when someone joins the mailing list.
  *
  * Source of truth for the tunings is the PitchGrid preset table shipped in the
  * Ableton Move module (move-anything-pitchgrid/dsp/pitchgrid_presets.h, 191 presets,
