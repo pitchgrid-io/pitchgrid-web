@@ -503,7 +503,7 @@ import Newsletter from '$lib/components/Newsletter.svelte';
 					<ul>
 						<li>Bayes GmbH, Cologne</li>
 						<li><a href="mailto:peter@pitchgrid.io">peter@pitchgrid.io</a></li>
-						<li><a href="https://discord.gg/nm5RwCJhQT" target="_blank">Discord</a></li>
+						<li><a href="https://discord.gg/Cuspq2RKj3" target="_blank" rel="noopener noreferrer">Discord</a></li>
 						<li><a href="https://www.youtube.com/@pitchgrid-io" target="_blank">YouTube</a></li>
 					</ul>
 				</div>

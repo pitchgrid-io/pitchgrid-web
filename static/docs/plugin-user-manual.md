@@ -619,7 +619,7 @@ This is a beta feature; the protocol may change in future versions.
 
 - Documentation: [pitchgrid.io](https://pitchgrid.io)
 - Email: peter@pitchgrid.io
-- Community: [PitchGrid Discord](https://discord.gg/pitchgrid)
+- Community: [PitchGrid Discord](https://discord.gg/Cuspq2RKj3)
 
 ---
 
