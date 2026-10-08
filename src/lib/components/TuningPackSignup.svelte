@@ -77,9 +77,9 @@
 			<label class="tp-check">
 				<input type="checkbox" bind:checked={consent} required disabled={loading} />
 				<span>
-					Email me the Tuning Pack and occasional PitchGrid news (about 1–2 emails a month).
+					Email me the Tuning Pack and occasional PitchGrid news from Bayes GmbH (about 1–2 emails a month).
 					I'll confirm by email and can unsubscribe at any time.
-					<a href="/privacy">Privacy policy</a>.
+					<a href="/privacy">Privacy policy</a>
 				</span>
 			</label>
 			<label class="tp-check">

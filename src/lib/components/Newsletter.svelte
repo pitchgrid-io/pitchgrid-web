@@ -65,8 +65,9 @@
 				disabled={loading}
 			/>
 			<span>
-				I agree to receive email updates about PitchGrid.
-				<a href="/privacy">See our privacy policy</a>.
+				Email me PitchGrid news from Bayes GmbH and the free Tuning Pack (about 1–2 emails a month).
+				I'll confirm by email and can unsubscribe at any time.
+				<a href="/privacy">Privacy policy</a>
 			</span>
 		</label>
 		<button type="submit" disabled={loading || !email || !consent}>

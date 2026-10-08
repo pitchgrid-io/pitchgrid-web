@@ -66,8 +66,9 @@
             <li>
                 <h2>Who sells it</h2>
                 <p>
-                    Sold by Moonbase AS, our merchant of record. VAT is calculated at checkout from your country.
-                    The plugin is licensed by Bayes GmbH.
+                    Sold by Moonbase AS, our merchant of record. The price includes VAT; checkout applies the rate
+                    for your country. The plugin is licensed by Bayes GmbH. In the US, sales tax may be added at
+                    checkout.
                 </p>
             </li>
             <li>
@@ -79,11 +80,12 @@
             </li>
             <li>
                 <h2>Delivery and refunds</h2>
-                <!-- LEX REVIEW: refund/withdrawal wording -->
                 <p>
-                    Digital delivery is immediate. At checkout you agree to start the download right away, so the
-                    EU 14-day right of withdrawal ends at that point. Refunds and statutory rights are handled by
-                    Moonbase under their
+                    Your license is delivered right after payment. If you buy as a consumer in the EU or EEA, you
+                    normally have 14 days to withdraw. Because delivery is immediate, Moonbase's checkout asks you to
+                    agree to immediate delivery and to confirm that you then lose that right. Once your license is
+                    delivered, you can no longer withdraw. Refunds, withdrawal and your other statutory rights are
+                    handled by Moonbase, the seller, under their
                     <a href={MOONBASE_BUYER_TERMS_URL} target="_blank" rel="noopener noreferrer">buyer terms</a>.
                 </p>
             </li>
