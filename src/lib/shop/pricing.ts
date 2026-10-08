@@ -18,4 +18,4 @@ export const TRIAL_DAYS = 14;
  * Empty = hidden. Example for before the unified release:
  *   'Current price. It goes up with the unified release (plugin + Mapper + synth in one).'
  */
-export const PRICE_NOTE = '';
+export const PRICE_NOTE = 'Includes the upcoming unified update free. Price goes up at launch.';
