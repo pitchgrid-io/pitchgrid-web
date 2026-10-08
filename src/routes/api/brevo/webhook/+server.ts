@@ -12,8 +12,8 @@ import { DownstreamError, moonbaseClient } from '$lib/server/consent/clients';
  * (or send it as "Authorization: Bearer <secret>"). Without the secret the route answers 503.
  *
  * Write: PATCH /api/customers/{id} {"communicationPreferences":{"newsletterOptIn":false}}, the only
- * preference field the Core API documents for PATCH. productUpdatesOptIn=false is added only with
- * MOONBASE_PREFS_WRITE_PRODUCT_UPDATES=true, after Moonbase confirms the Core API accepts it.
+ * preference field the Core API documents for PATCH. productUpdatesOptIn is not written (not
+ * documented; both Moonbase toggles are hidden in our embed, Brevo is the source of truth).
  * Nothing is written unless MOONBASE_PREFS_WRITE=true. Opt-in events are never mirrored back.
  * Non-customers (footer prospects) are ignored: 404 from Moonbase => 200 no-op.
  */
@@ -43,12 +43,9 @@ export const POST: RequestHandler = async ({ request, url }) => {
             if (!moonbase) { results.push('skipped:no MOONBASE_API_KEY'); continue; }
             const customer = await moonbase.getCustomer(e.email.trim().toLowerCase());
             if (!customer) { results.push('skipped:not a Moonbase customer'); continue; }
-            const p = customer.prefs;
-            if (!p.newsletterOptIn && (!cfg.moonbaseWriteProductUpdates || !p.productUpdatesOptIn)) {
-                results.push('noop:already off'); continue;
-            }
+            if (!customer.prefs.newsletterOptIn) { results.push('noop:already off'); continue; }
             if (!cfg.moonbasePrefsWrite) { results.push('dry-run:MOONBASE_PREFS_WRITE not true'); continue; }
-            await moonbase.patchPrefs(customer.id, moonbaseOptOutPatch(cfg));
+            await moonbase.patchPrefs(customer.id, moonbaseOptOutPatch());
             results.push('done:moonbase prefs off');
         }
     } catch (err) {

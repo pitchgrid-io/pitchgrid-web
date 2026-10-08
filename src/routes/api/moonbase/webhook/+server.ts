@@ -8,8 +8,10 @@ import { brevoClient, DownstreamError, execute, moonbaseClient } from '$lib/serv
  * communication preferences. See src/lib/server/consent/logic.ts for the list design.
  *
  * Events (https://moonbase.sh/docs/webhooks/):
- *   OrderCompleted        -> upsert buyer into owners-service; owners-news only via DOI, or by
- *                            moving an already DOI-confirmed prospect. Fully refunded orders skipped.
+ *   OrderCompleted        -> upsert buyer into owners-service (list 5); owners-news (list 8) only via
+ *                            Brevo DOI (a Moonbase opt-in only triggers the DOI mail), or by moving a
+ *                            member of a proven DOI list (BREVO_CONFIRMED_LIST_IDS, never 2/5/6).
+ *                            Fully refunded orders skipped.
  *   CustomerSubscribed    -> payload has no preference fields, so re-read the customer
  *   CustomerUnsubscribed     (GET /api/customers/{id}) and reconcile owners-news.
  *   anything else         -> 200, ignored.

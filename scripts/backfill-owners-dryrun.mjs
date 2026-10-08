@@ -6,8 +6,10 @@
  * double opt-in mails to customers, which needs Peter's explicit OK first.
  * Never prints e-mail addresses or names.
  *
- *   MOONBASE_API_KEY=... [BREVO_API_KEY=...] [BREVO_LIST_OWNERS_SERVICE=..] [BREVO_LIST_OWNERS_NEWS=..]
- *   [BREVO_LIST_PROSPECTS=6] npm run backfill:owners:dry-run
+ * ON HOLD: the real DOI backfill waits for the unified release and Peter's OK.
+ *
+ *   MOONBASE_API_KEY=... [BREVO_API_KEY=...] npm run backfill:owners:dry-run
+ *   (lists default to 5 = owners-service, 8 = owners-news; override with BREVO_LIST_* env vars)
  */
 import { loadTs } from './load-ts.mjs';
 
@@ -17,13 +19,8 @@ const MB_KEY = process.env.MOONBASE_API_KEY;
 const BREVO_KEY = process.env.BREVO_API_KEY;
 if (!MB_KEY) { console.error('MOONBASE_API_KEY missing'); process.exit(1); }
 
-// Placeholder ids (-1) when not configured, so the plan still shows every branch.
-const env = { BREVO_LIST_OWNERS_SERVICE: '-1', BREVO_LIST_OWNERS_NEWS: '-2', BREVO_DOI_TEMPLATE_ID: '-3', ...process.env };
-const cfg = L.readConfig(env);
-const asId = (v, fallback) => { const n = Number.parseInt(v ?? '', 10); return Number.isFinite(n) ? n : fallback; };
-cfg.lists.ownersService = asId(env.BREVO_LIST_OWNERS_SERVICE, -1);
-cfg.lists.ownersNews = asId(env.BREVO_LIST_OWNERS_NEWS, -2);
-cfg.doiTemplateId = cfg.doiTemplateId ?? asId(env.BREVO_DOI_TEMPLATE_ID, -3);
+const cfg = L.readConfig(process.env);
+cfg.doiTemplateId = cfg.doiTemplateId ?? -1; // placeholder so the DOI branch still shows up in counts
 
 async function get(url, headers) {
     for (let i = 0; i < 5; i++) {
@@ -82,7 +79,7 @@ for (const c of customers) {
 const print = (title, m) => { console.log(`\n${title}`); [...m].sort().forEach(([k, v]) => console.log(`  ${String(v).padStart(4)}  ${k}`)); };
 console.log(`DRY RUN. customers=${customers.length} owners=${owners} (active licences; paid = from a completed order with amount > 0)`);
 console.log(`Brevo lookups: ${BREVO_KEY ? 'yes' : 'NO (BREVO_API_KEY not set: prospect/blacklist state unknown, every owner treated as not in Brevo)'}`);
-console.log(`Lists: service=${cfg.lists.ownersService} news=${cfg.lists.ownersNews} confirmed=[${cfg.confirmedListIds}] (negative = not configured)`);
+console.log(`Lists: service=${cfg.lists.ownersService} news=${cfg.lists.ownersNews} confirmed=[${cfg.confirmedListIds}] (DOI template ${cfg.doiTemplateId}, -1 = not configured)`);
 print('Moonbase flag combos by owner kind:', combos);
 if (BREVO_KEY) print('Owners by Brevo state:', brevoState);
 print('Planned routing (every owner also gets upsert_owner_service):', plans);

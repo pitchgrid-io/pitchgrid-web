@@ -3,11 +3,14 @@
  * Pure logic only: no network, no SvelteKit imports, so it can be unit tested in plain Node.
  *
  * Design (decided 2026-10-08 after legal review):
- *  - owners-service list: every owner. Service mails only (releases, fixes, licence changes,
- *    no sales content). Legal basis: contract, Art. 6(1)(b) GDPR.
- *  - owners-news list: only owners who opted in (Moonbase newsletterOptIn OR productUpdatesOptIn),
- *    and ONLY via Brevo double opt-in, or by moving an already DOI-confirmed prospect.
- *  - prospects list: footer / website sign-ups after DOI (src/routes/api/subscribe).
+ *  - owners-service = Brevo list 5 "PitchGrid owners (service only)": every owner, granted
+ *    licences included. Service mails only (releases, fixes, licence changes, no sales content),
+ *    with an unsubscribe footer. Legal basis: contract, Art. 6(1)(b) GDPR. Not a DOI list.
+ *  - owners-news = Brevo list 8 "PitchGrid owners-news (DOI opt-in)": only via Brevo double
+ *    opt-in. A Moonbase opt-in (newsletterOptIn OR productUpdatesOptIn, e.g. the checkout box)
+ *    only TRIGGERS the DOI mail; it is never enough on its own.
+ *  - prospects = list 6. Lists 2/5/6 are NOT double opt-in proof (list 2 is mostly bulk imports;
+ *    5 and 6 were split from it), so they must never be in BREVO_CONFIRMED_LIST_IDS.
  *  The UWG §7(3) existing-customer exception is NOT used: Moonbase is the seller and buyers were
  *  never offered an objection at checkout. Nobody is marked newsletter-consented by this code.
  */
@@ -52,7 +55,10 @@ export async function verifyMoonbaseSignature(
 
 export type ConsentConfig = {
     lists: { ownersService?: number; ownersNews?: number; prospects?: number };
-    /** Lists whose members count as DOI-confirmed prospects. Defaults to [prospects]. */
+    /**
+     * Lists whose members are proven double opt-in confirmations and may be moved into owners-news
+     * without a second DOI. Default: none. Never lists 2, 5 or 6 (not DOI proof).
+     */
     confirmedListIds: number[];
     /** CONSENT_SYNC_WRITES=true: actually write to Brevo. Otherwise plan + log only. */
     writesEnabled: boolean;
@@ -60,15 +66,18 @@ export type ConsentConfig = {
     doiEnabled: boolean;
     doiTemplateId?: number;
     doiRedirectUrl?: string;
-    /** MOONBASE_PREFS_WRITE=true: a Brevo unsubscribe may PATCH Moonbase newsletterOptIn=false. */
-    moonbasePrefsWrite: boolean;
     /**
-     * MOONBASE_PREFS_WRITE_PRODUCT_UPDATES=true: also send productUpdatesOptIn=false.
-     * NOT documented for PATCH /api/customers/{id} (only newsletterOptIn is). Keep off until
-     * Moonbase confirms the Core API accepts it.
+     * MOONBASE_PREFS_WRITE=true: a Brevo unsubscribe may PATCH Moonbase newsletterOptIn=false
+     * (the only preference field the Core API documents for PATCH). productUpdatesOptIn is never
+     * written: not documented, and both toggles are hidden in our embed.
      */
-    moonbaseWriteProductUpdates: boolean;
+    moonbasePrefsWrite: boolean;
 };
+
+/** Brevo list ids decided 2026-10-08. Env vars override; these are only fallbacks. */
+export const DEFAULT_LISTS = { ownersService: 5, ownersNews: 8, prospects: 6 } as const;
+/** List ids that must never count as DOI proof, even if configured by mistake. */
+export const NEVER_CONFIRMED = [2, 5, 6] as const;
 
 const int = (v: string | undefined): number | undefined => {
     const n = Number.parseInt((v ?? '').trim(), 10);
@@ -77,25 +86,23 @@ const int = (v: string | undefined): number | undefined => {
 const flag = (v: string | undefined) => (v ?? '').trim().toLowerCase() === 'true';
 
 export function readConfig(env: Record<string, string | undefined>): ConsentConfig {
-    const prospects = int(env.BREVO_LIST_PROSPECTS);
     const confirmed = (env.BREVO_CONFIRMED_LIST_IDS ?? '')
         .split(',')
         .map((s) => int(s))
-        .filter((n): n is number => n !== undefined);
+        .filter((n): n is number => n !== undefined && !(NEVER_CONFIRMED as readonly number[]).includes(n));
     return {
         lists: {
-            ownersService: int(env.BREVO_LIST_OWNERS_SERVICE),
-            ownersNews: int(env.BREVO_LIST_OWNERS_NEWS),
-            prospects
+            ownersService: int(env.BREVO_LIST_OWNERS_SERVICE) ?? DEFAULT_LISTS.ownersService,
+            ownersNews: int(env.BREVO_LIST_OWNERS_NEWS) ?? DEFAULT_LISTS.ownersNews,
+            prospects: int(env.BREVO_LIST_PROSPECTS) ?? DEFAULT_LISTS.prospects
         },
-        confirmedListIds: confirmed.length ? confirmed : prospects ? [prospects] : [],
+        confirmedListIds: confirmed,
         writesEnabled: flag(env.CONSENT_SYNC_WRITES),
         doiEnabled: flag(env.CONSENT_SYNC_DOI),
         doiTemplateId: int(env.BREVO_DOI_TEMPLATE_ID_OWNERS_NEWS) ?? int(env.BREVO_DOI_TEMPLATE_ID),
         doiRedirectUrl:
             env.BREVO_DOI_REDIRECT_URL_OWNERS_NEWS?.trim() || env.BREVO_DOI_REDIRECT_URL?.trim() || undefined,
-        moonbasePrefsWrite: flag(env.MOONBASE_PREFS_WRITE),
-        moonbaseWriteProductUpdates: flag(env.MOONBASE_PREFS_WRITE_PRODUCT_UPDATES)
+        moonbasePrefsWrite: flag(env.MOONBASE_PREFS_WRITE)
     };
 }
 
@@ -148,7 +155,7 @@ export function planForOwner(
         ? cfg.confirmedListIds.filter((id) => brevo.listIds.includes(id))
         : [];
     if (confirmedIn.length) {
-        // Already DOI-confirmed prospect: move without a second DOI.
+        // Proven DOI confirmation (BREVO_CONFIRMED_LIST_IDS): move without a second DOI.
         actions.push({ kind: 'move_prospect_to_news', addListId: ownersNews, removeListIds: confirmedIn });
         return actions;
     }
@@ -193,11 +200,9 @@ export function isBrevoOptOutEvent(event: unknown): boolean {
     return event === 'unsubscribe' || event === 'unsubscribed' || event === 'spam';
 }
 
-/** Body for PATCH /api/customers/{id} when Brevo reports an opt-out. */
-export function moonbaseOptOutPatch(cfg: ConsentConfig): { communicationPreferences: Partial<MoonbasePrefs> } {
-    const communicationPreferences: Partial<MoonbasePrefs> = { newsletterOptIn: false };
-    if (cfg.moonbaseWriteProductUpdates) communicationPreferences.productUpdatesOptIn = false;
-    return { communicationPreferences };
+/** Body for PATCH /api/customers/{id} when Brevo reports an opt-out (newsletter flag only). */
+export function moonbaseOptOutPatch(): { communicationPreferences: { newsletterOptIn: false } } {
+    return { communicationPreferences: { newsletterOptIn: false } };
 }
 
 /** Status for a failed downstream call: retryable errors become 5xx so the sender retries. */
