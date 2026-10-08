@@ -8,9 +8,9 @@
     // this page gives price, seller, payment and refund context before the
     // click into Moonbase. No auto-forward: the visitor clicks through.
 
-    const title = `Buy PitchGrid: ${PRICE_LABEL_ALL} one-time, perpetual licence`;
+    const title = `Buy PitchGrid: ${PRICE_LABEL_ALL} one-time, perpetual license`;
     const description =
-        `PitchGrid Plugin for macOS and Windows. ${PRICE_LABEL_ALL}, one-time payment, perpetual licence, no subscription. ` +
+        `PitchGrid Plugin for macOS and Windows. ${PRICE_LABEL_ALL}, one-time payment, perpetual license, no subscription. ` +
         `${TRIAL_DAYS}-day free trial in the installer. Card or PayPal, sold by Moonbase AS.`;
     const pageUrl = 'https://pitchgrid.io/buy';
     const ogImage = 'https://pitchgrid.io/docs/images/PitchGridPluginUI.png';
@@ -52,7 +52,7 @@
         <h1>Buy PitchGrid</h1>
         <p class="price">{PRICE_LABEL_ALL}</p>
         <p class="currency">Same amount in EUR, USD or GBP. Checkout shows the currency for your country.</p>
-        <p class="lead">One-time payment. Perpetual licence, not a subscription.</p>
+        <p class="lead">One-time payment. Perpetual license, not a subscription.</p>
         {#if PRICE_NOTE}<p class="price-note">{PRICE_NOTE}</p>{/if}
 
         <a class="buy-cta" href={checkoutUrl} data-plausible-label="Continue to checkout">Continue to checkout</a>
@@ -92,8 +92,8 @@
         <div class="owners">
             <h2>Already own PitchGrid? Don't buy again.</h2>
             <p>
-                Your licence is already on your Moonbase account.
-                <a href={MOONBASE_LOGIN_URL}>Sign in</a> with the email on your old licence; never set a password?
+                Your license is already on your Moonbase account.
+                <a href={MOONBASE_LOGIN_URL}>Sign in</a> with the email on your old license; never set a password?
                 <a href={MOONBASE_RESET_URL}>Reset it</a>.
             </p>
         </div>

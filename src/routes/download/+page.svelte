@@ -78,7 +78,7 @@
         {#if PRICE_NOTE}<p class="price-note">{PRICE_NOTE}</p>{/if}
         <p class="indiekey">
             Existing Indiekey customers: sign in with the email on the old license.
-            Set a password via <a href="https://pitchgrid.moonbase.sh">Forgot password</a> if you have not used Moonbase.
+            Set a password via <a href="https://pitchgrid.moonbase.sh/forgot-password">Forgot password</a> if you have not used Moonbase.
         </p>
         <p class="legal-links">
             <a href="/plugin-eula">EULA</a>

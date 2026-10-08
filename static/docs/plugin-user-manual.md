@@ -117,7 +117,7 @@ For players who want to *see and play* in 2D, **PitchGrid Mapper** lets you use 
 On first launch, you'll see a licensing dialog:
 
 - **Trial**: the 14-day trial is in the installer. No credit card — download, run, and play.
-- **Activate**: sign in with your Moonbase account to activate this machine (not an Indiekey license key). Existing Indiekey customers sign in with the email on the old license; set a password via [Forgot password](https://pitchgrid.moonbase.sh) if you have not used Moonbase.
+- **Activate**: sign in with your Moonbase account to activate this machine (not an Indiekey license key). Existing Indiekey customers sign in with the email on the old license; set a password via [Forgot password](https://pitchgrid.moonbase.sh/forgot-password) if you have not used Moonbase.
 
 ---
 
@@ -640,7 +640,7 @@ This is a beta feature; the protocol may change in future versions.
 
 1. Launch PitchGrid in your DAW
 2. Sign in with your Moonbase account to activate this machine
-3. Existing Indiekey customers: use the email on the old license; set a password via [Forgot password](https://pitchgrid.moonbase.sh) if you have not used Moonbase
+3. Existing Indiekey customers: use the email on the old license; set a password via [Forgot password](https://pitchgrid.moonbase.sh/forgot-password) if you have not used Moonbase
 
 To free a paid seat on this machine, use **Revoke device activation** in Account & License (or the same action in the Moonbase licenses overview).
 
