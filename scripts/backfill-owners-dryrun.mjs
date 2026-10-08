@@ -2,11 +2,10 @@
 /*
  * DRY RUN ONLY: how existing Moonbase owners would be routed into the Brevo owner lists.
  * Makes GET requests only (Moonbase Core API; Brevo GET /contacts/{email} if BREVO_API_KEY is set)
- * and prints aggregate counts. It has no write mode on purpose: a real backfill would trigger Brevo
- * double opt-in mails to customers, which needs Peter's explicit OK first.
+ * and prints aggregate counts, incl. how many owners would be added to owners-news (list 8)
+ * directly (Moonbase newsletterOptIn or productUpdatesOptIn true, not blocked in Brevo).
+ * It has no write mode on purpose: a real backfill needs Peter's explicit OK first.
  * Never prints e-mail addresses or names.
- *
- * ON HOLD: the real DOI backfill waits for the unified release and Peter's OK.
  *
  *   MOONBASE_API_KEY=... [BREVO_API_KEY=...] npm run backfill:owners:dry-run
  *   (lists default to 5 = owners-service, 8 = owners-news; override with BREVO_LIST_* env vars)
@@ -20,7 +19,6 @@ const BREVO_KEY = process.env.BREVO_API_KEY;
 if (!MB_KEY) { console.error('MOONBASE_API_KEY missing'); process.exit(1); }
 
 const cfg = L.readConfig(process.env);
-cfg.doiTemplateId = cfg.doiTemplateId ?? -1; // placeholder so the DOI branch still shows up in counts
 
 async function get(url, headers) {
     for (let i = 0; i < 5; i++) {
@@ -55,7 +53,7 @@ for (const l of licenses) {
 
 const count = (m, k) => m.set(k, (m.get(k) ?? 0) + 1);
 const combos = new Map(), plans = new Map(), brevoState = new Map();
-let owners = 0;
+let owners = 0, addNews = 0, addService = 0;
 for (const c of customers) {
     if (c.isDeleted) continue;
     const kind = ownerKind.get(c.id) ?? 'not_owner';
@@ -67,21 +65,25 @@ for (const c of customers) {
     let contact = { exists: false };
     if (BREVO_KEY) {
         const res = await get(`https://api.brevo.com/v3/contacts/${encodeURIComponent(c.email)}?identifierType=email_id`, { 'api-key': BREVO_KEY, accept: 'application/json' });
-        if (res.ok) { const b = await res.json(); contact = { exists: true, listIds: b.listIds ?? [], emailBlacklisted: !!b.emailBlacklisted }; }
+        if (res.ok) { const b = await res.json(); contact = { exists: true, listIds: b.listIds ?? [], emailBlacklisted: !!b.emailBlacklisted, listUnsubscribed: b.listUnsubscribed ?? [] }; }
         else if (res.status !== 404) throw new Error(`brevo ${res.status}`);
         count(brevoState, !contact.exists ? 'not in Brevo' : contact.emailBlacklisted ? 'in Brevo, blacklisted' :
+            contact.listUnsubscribed.length ? 'in Brevo, unsubscribed from a list' :
             `in Brevo, lists [${contact.listIds.sort((a, b) => a - b).join(',')}]`);
     }
-    const news = L.planForOwner(cfg, prefs, contact, kind === 'paid').find((a) => a.kind !== 'upsert_owner_service');
-    count(plans, `${kind.padEnd(10)} ${news.kind === 'skip' ? 'service only (' + news.reason + ')' : news.kind}`);
+    const plan = L.planForOwner(cfg, prefs, contact, kind === 'paid');
+    const label = plan.map((a) => (a.kind === 'skip' ? `skip (${a.reason})` : `${a.kind}:${a.listId}`)).join(' + ');
+    count(plans, `${kind.padEnd(10)} ${label}`);
+    if (plan.some((a) => a.kind === 'add_to_news')) addNews++;
+    if (plan.some((a) => a.kind === 'upsert_owner_service')) addService++;
 }
 
 const print = (title, m) => { console.log(`\n${title}`); [...m].sort().forEach(([k, v]) => console.log(`  ${String(v).padStart(4)}  ${k}`)); };
 console.log(`DRY RUN. customers=${customers.length} owners=${owners} (active licences; paid = from a completed order with amount > 0)`);
 console.log(`Brevo lookups: ${BREVO_KEY ? 'yes' : 'NO (BREVO_API_KEY not set: prospect/blacklist state unknown, every owner treated as not in Brevo)'}`);
-console.log(`Lists: service=${cfg.lists.ownersService} news=${cfg.lists.ownersNews} confirmed=[${cfg.confirmedListIds}] (DOI template ${cfg.doiTemplateId}, -1 = not configured)`);
+console.log(`Lists: service=${cfg.lists.ownersService} news=${cfg.lists.ownersNews}`);
 print('Moonbase flag combos by owner kind:', combos);
 if (BREVO_KEY) print('Owners by Brevo state:', brevoState);
-print('Planned routing (every owner also gets upsert_owner_service):', plans);
-const doi = [...plans].filter(([k]) => k.includes('trigger_doi_news')).reduce((s, [, v]) => s + v, 0);
-console.log(`\nWould send ${doi} Brevo DOI e-mail(s). Not sent: this script has no write mode.`);
+print('Planned routing:', plans);
+console.log(`\nWould upsert ${addService} owner(s) into list ${cfg.lists.ownersService} (already members are just updated).`);
+console.log(`Would add ${addNews} owner(s) to list ${cfg.lists.ownersNews} directly (no DOI, no email). Nothing written: this script has no write mode.`);

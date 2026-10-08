@@ -34,8 +34,8 @@ export const MOONBASE_OPTIONS = {
     // No Moonbase sale banners/popups on the site; we present sales ourselves.
     promotions: { enabled: false },
     // Hide Moonbase's Newsletter and Product updates checkboxes (account panel, subscribe and
-    // manage-preferences views). Brevo is the source of truth for marketing consent (double
-    // opt-in, see src/lib/server/consent). Shape matches the bundle's defaults
+    // manage-preferences views). Brevo is the source of truth for marketing consent
+    // (see src/lib/server/consent). Shape matches the bundle's defaults
     // (communicationPreferences.show.{newsletter,productUpdates}, both true by default, deep-merged).
     // Only affects our embed; pages hosted on pitchgrid.moonbase.sh (e.g. checkout) are unaffected.
     communicationPreferences: { show: { newsletter: false, productUpdates: false } },

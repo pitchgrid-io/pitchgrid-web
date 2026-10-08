@@ -2,17 +2,16 @@
  * Consent sync between Moonbase (seller, merchant of record) and Brevo (our mailing tool).
  * Pure logic only: no network, no SvelteKit imports, so it can be unit tested in plain Node.
  *
- * Design (decided 2026-10-08 after legal review):
+ * Design (owner decision 2026-10-08, revised: double opt-in is no longer a gate):
  *  - owners-service = Brevo list 5 "PitchGrid owners (service only)": every owner, granted
  *    licences included. Service mails only (releases, fixes, licence changes, no sales content),
- *    with an unsubscribe footer. Legal basis: contract, Art. 6(1)(b) GDPR. Not a DOI list.
- *  - owners-news = Brevo list 8 "PitchGrid owners-news (DOI opt-in)": only via Brevo double
- *    opt-in. A Moonbase opt-in (newsletterOptIn OR productUpdatesOptIn, e.g. the checkout box)
- *    only TRIGGERS the DOI mail; it is never enough on its own.
- *  - prospects = list 6. Lists 2/5/6 are NOT double opt-in proof (list 2 is mostly bulk imports;
- *    5 and 6 were split from it), so they must never be in BREVO_CONFIRMED_LIST_IDS.
- *  The UWG §7(3) existing-customer exception is NOT used: Moonbase is the seller and buyers were
- *  never offered an objection at checkout. Nobody is marked newsletter-consented by this code.
+ *    with an unsubscribe footer. Legal basis: contract, Art. 6(1)(b) GDPR.
+ *  - owners-news = Brevo list 8: an owner whose Moonbase newsletterOptIn OR productUpdatesOptIn is
+ *    true is added directly, no DOI mail and no waiting for a click.
+ *  - prospects = list 6 (website signups, see src/lib/server/subscribe).
+ *  - Brevo is the source of truth for opt-outs: a contact that is blacklisted or unsubscribed from
+ *    any list is never (re-)added to any list by this code.
+ *  - Both Moonbase flags off (CustomerSubscribed/Unsubscribed) removes the contact from list 8.
  */
 // ---------------------------------------------------------------- signature
 
@@ -55,17 +54,8 @@ export async function verifyMoonbaseSignature(
 
 export type ConsentConfig = {
     lists: { ownersService?: number; ownersNews?: number; prospects?: number };
-    /**
-     * Lists whose members are proven double opt-in confirmations and may be moved into owners-news
-     * without a second DOI. Default: none. Never lists 2, 5 or 6 (not DOI proof).
-     */
-    confirmedListIds: number[];
     /** CONSENT_SYNC_WRITES=true: actually write to Brevo. Otherwise plan + log only. */
     writesEnabled: boolean;
-    /** CONSENT_SYNC_DOI=true: allowed to trigger Brevo DOI mails (sends email to the buyer). */
-    doiEnabled: boolean;
-    doiTemplateId?: number;
-    doiRedirectUrl?: string;
     /**
      * MOONBASE_PREFS_WRITE=true: a Brevo unsubscribe may PATCH Moonbase newsletterOptIn=false
      * (the only preference field the Core API documents for PATCH). productUpdatesOptIn is never
@@ -76,8 +66,6 @@ export type ConsentConfig = {
 
 /** Brevo list ids decided 2026-10-08. Env vars override; these are only fallbacks. */
 export const DEFAULT_LISTS = { ownersService: 5, ownersNews: 8, prospects: 6 } as const;
-/** List ids that must never count as DOI proof, even if configured by mistake. */
-export const NEVER_CONFIRMED = [2, 5, 6] as const;
 
 const int = (v: string | undefined): number | undefined => {
     const n = Number.parseInt((v ?? '').trim(), 10);
@@ -86,22 +74,13 @@ const int = (v: string | undefined): number | undefined => {
 const flag = (v: string | undefined) => (v ?? '').trim().toLowerCase() === 'true';
 
 export function readConfig(env: Record<string, string | undefined>): ConsentConfig {
-    const confirmed = (env.BREVO_CONFIRMED_LIST_IDS ?? '')
-        .split(',')
-        .map((s) => int(s))
-        .filter((n): n is number => n !== undefined && !(NEVER_CONFIRMED as readonly number[]).includes(n));
     return {
         lists: {
             ownersService: int(env.BREVO_LIST_OWNERS_SERVICE) ?? DEFAULT_LISTS.ownersService,
             ownersNews: int(env.BREVO_LIST_OWNERS_NEWS) ?? DEFAULT_LISTS.ownersNews,
             prospects: int(env.BREVO_LIST_PROSPECTS) ?? DEFAULT_LISTS.prospects
         },
-        confirmedListIds: confirmed,
         writesEnabled: flag(env.CONSENT_SYNC_WRITES),
-        doiEnabled: flag(env.CONSENT_SYNC_DOI),
-        doiTemplateId: int(env.BREVO_DOI_TEMPLATE_ID_OWNERS_NEWS) ?? int(env.BREVO_DOI_TEMPLATE_ID),
-        doiRedirectUrl:
-            env.BREVO_DOI_REDIRECT_URL_OWNERS_NEWS?.trim() || env.BREVO_DOI_REDIRECT_URL?.trim() || undefined,
         moonbasePrefsWrite: flag(env.MOONBASE_PREFS_WRITE)
     };
 }
@@ -112,17 +91,23 @@ export type MoonbasePrefs = { newsletterOptIn: boolean; productUpdatesOptIn: boo
 
 export type BrevoContactState =
     | { exists: false }
-    | { exists: true; listIds: number[]; emailBlacklisted: boolean };
+    | { exists: true; listIds: number[]; emailBlacklisted: boolean; listUnsubscribed?: number[] };
 
 export type Action =
     | { kind: 'upsert_owner_service'; listId: number; /** sets PURCHASED=true; only for a real paid order */ purchased: boolean }
-    | { kind: 'move_prospect_to_news'; addListId: number; removeListIds: number[] }
-    | { kind: 'trigger_doi_news'; listId: number; templateId: number }
+    | { kind: 'add_to_news'; listId: number }
     | { kind: 'remove_from_news'; listId: number }
     | { kind: 'skip'; reason: string };
 
 export const optedIn = (p: MoonbasePrefs | null | undefined) =>
     !!p && (p.newsletterOptIn || p.productUpdatesOptIn);
+
+/** Blacklisted, or unsubscribed from any list: Brevo says stop, so we never (re-)add. */
+export function isBlocked(brevo: BrevoContactState): boolean {
+    return brevo.exists && (brevo.emailBlacklisted || (brevo.listUnsubscribed?.length ?? 0) > 0);
+}
+
+const BLOCKED = 'contact blacklisted/unsubscribed in Brevo: not (re-)added';
 
 /** Routing for OrderCompleted (also used by the backfill dry run). */
 export function planForOwner(
@@ -132,48 +117,30 @@ export function planForOwner(
     /** true only for a completed order with an amount > 0 (not €0 coupons, not granted licences) */
     paidOrder = false
 ): Action[] {
-    const actions: Action[] = [];
     const { ownersService, ownersNews } = cfg.lists;
+    if (isBlocked(brevo)) return [{ kind: 'skip', reason: BLOCKED }];
+    const actions: Action[] = [];
 
     // 1. Every owner goes to owners-service (contract basis, service mails only).
     if (ownersService) actions.push({ kind: 'upsert_owner_service', listId: ownersService, purchased: paidOrder });
     else actions.push({ kind: 'skip', reason: 'BREVO_LIST_OWNERS_SERVICE not set' });
 
-    // 2. owners-news only with consent we can prove.
-    if (!ownersNews) {
-        actions.push({ kind: 'skip', reason: 'BREVO_LIST_OWNERS_NEWS not set' });
-        return actions;
-    }
-    if (brevo.exists && brevo.emailBlacklisted) {
-        // Brevo is the source of truth for unsubscribes: never re-subscribe a blacklisted contact.
-        actions.push({ kind: 'skip', reason: 'contact unsubscribed/blacklisted in Brevo' });
-        return actions;
-    }
-    if (brevo.exists && brevo.listIds.includes(ownersNews)) {
-        actions.push({ kind: 'skip', reason: 'already in owners-news' });
-        return actions;
-    }
-    const confirmedIn = brevo.exists
-        ? cfg.confirmedListIds.filter((id) => brevo.listIds.includes(id))
-        : [];
-    if (confirmedIn.length) {
-        // Proven DOI confirmation (BREVO_CONFIRMED_LIST_IDS): move without a second DOI.
-        actions.push({ kind: 'move_prospect_to_news', addListId: ownersNews, removeListIds: confirmedIn });
-        return actions;
-    }
-    if (optedIn(prefs)) {
-        if (!cfg.doiTemplateId) actions.push({ kind: 'skip', reason: 'no DOI template id configured' });
-        else actions.push({ kind: 'trigger_doi_news', listId: ownersNews, templateId: cfg.doiTemplateId });
-        return actions;
-    }
-    actions.push({ kind: 'skip', reason: 'no newsletter/product-updates opt-in: service list only' });
+    // 2. owners-news directly when either Moonbase flag is on.
+    actions.push(...newsActions(ownersNews, prefs, brevo));
     return actions;
+}
+
+function newsActions(ownersNews: number | undefined, prefs: MoonbasePrefs | null, brevo: BrevoContactState): Action[] {
+    if (!ownersNews) return [{ kind: 'skip', reason: 'BREVO_LIST_OWNERS_NEWS not set' }];
+    if (!optedIn(prefs)) return [{ kind: 'skip', reason: 'no newsletter/product-updates opt-in: service list only' }];
+    if (brevo.exists && brevo.listIds.includes(ownersNews)) return [{ kind: 'skip', reason: 'already in owners-news' }];
+    return [{ kind: 'add_to_news', listId: ownersNews }];
 }
 
 /**
  * CustomerSubscribed / CustomerUnsubscribed carry no preference fields, so the handler re-reads
  * the customer from the Core API and reconciles: both flags off => leave owners-news; a flag on =>
- * same news routing as for an order (DOI or move), but no owners-service change.
+ * owner added to owners-news directly (no owners-service change, no DOI).
  */
 export function planForPrefsChange(
     cfg: ConsentConfig,
@@ -185,16 +152,16 @@ export function planForPrefsChange(
     if (!ownersNews) return [{ kind: 'skip', reason: 'BREVO_LIST_OWNERS_NEWS not set' }];
     if (!prefs) return [{ kind: 'skip', reason: 'customer not found in Moonbase' }];
     if (!optedIn(prefs)) {
+        // Removing is always allowed, blocked or not.
         if (brevo.exists && brevo.listIds.includes(ownersNews))
             return [{ kind: 'remove_from_news', listId: ownersNews }];
         return [{ kind: 'skip', reason: 'opted out and not in owners-news' }];
     }
+    if (isBlocked(brevo)) return [{ kind: 'skip', reason: BLOCKED }];
     // Moonbase newsletter contacts without a licence are prospects, not owners: the website
-    // DOI form handles those, so we don't add them to owner lists here.
+    // signup handles those, so we don't add them to owner lists here.
     if (!isOwner) return [{ kind: 'skip', reason: 'not an owner' }];
-    return planForOwner({ ...cfg, lists: { ...cfg.lists, ownersService: undefined } }, prefs, brevo).filter(
-        (a) => !(a.kind === 'skip' && a.reason === 'BREVO_LIST_OWNERS_SERVICE not set')
-    );
+    return newsActions(ownersNews, prefs, brevo);
 }
 
 /** PURCHASED means a real paid order: amount due > 0 and not fully refunded. */

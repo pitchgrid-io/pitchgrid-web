@@ -8,9 +8,9 @@ import { brevoClient, DownstreamError, execute, moonbaseClient } from '$lib/serv
  * communication preferences. See src/lib/server/consent/logic.ts for the list design.
  *
  * Events (https://moonbase.sh/docs/webhooks/):
- *   OrderCompleted        -> upsert buyer into owners-service (list 5); owners-news (list 8) only via
- *                            Brevo DOI (a Moonbase opt-in only triggers the DOI mail), or by moving a
- *                            member of a proven DOI list (BREVO_CONFIRMED_LIST_IDS, never 2/5/6).
+ *   OrderCompleted        -> upsert buyer into owners-service (list 5); if Moonbase newsletterOptIn or
+ *                            productUpdatesOptIn is true, also add to owners-news (list 8) directly.
+ *                            Blacklisted/unsubscribed Brevo contacts are never (re-)added.
  *                            Fully refunded orders skipped.
  *   CustomerSubscribed    -> payload has no preference fields, so re-read the customer
  *   CustomerUnsubscribed     (GET /api/customers/{id}) and reconcile owners-news.
@@ -19,15 +19,15 @@ import { brevoClient, DownstreamError, execute, moonbaseClient } from '$lib/serv
  * Security: X-Signature = Base64(HMAC-SHA256(MOONBASE_WEBHOOK_SECRET, raw body)), upper-cased.
  * Without the secret the route answers 503 and does nothing.
  *
- * Writes: nothing is written to Brevo unless CONSENT_SYNC_WRITES=true; DOI mails additionally need
- * CONSENT_SYNC_DOI=true (they e-mail the customer). Until then the route only logs its plan.
+ * Writes: nothing is written to Brevo unless CONSENT_SYNC_WRITES=true. Until then the route only
+ * logs its plan. This route never sends email.
  *
  * Retries: transient Brevo/Moonbase errors (network, 429, 5xx) return 503 so Moonbase can retry
  * (Moonbase does not document its retry policy). All actions are idempotent.
  *
- * TODO(legal): Lex's ruling of 2026-10-08: no UWG §7(3) existing-customer exception (Moonbase is
- * the seller and never offered buyers an objection). So owners-news is opt-in + DOI only, and
- * owners-service must only ever get service content. Revisit if checkout adds an objection notice.
+ * TODO(legal): owner decision 2026-10-08: no DOI gate; a Moonbase opt-in (checkout box or hosted
+ * preferences page) is taken as consent for owners-news. Lex to confirm that the Moonbase opt-in
+ * wording and its record are enough proof. owners-service must only ever get service content.
  */
 
 type MoonbasePayload = {
@@ -36,7 +36,7 @@ type MoonbasePayload = {
     customer?: { id?: string; email?: string; isDeleted?: boolean } | null;
 };
 
-export const POST: RequestHandler = async ({ request, url }) => {
+export const POST: RequestHandler = async ({ request }) => {
     const secret = process.env.MOONBASE_WEBHOOK_SECRET?.trim();
     if (!secret) return json({ error: 'not configured' }, { status: 503 });
 
@@ -89,7 +89,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
             actions = planForPrefsChange(cfg, customer?.prefs ?? null, contact, !!customer?.isOwner);
         }
 
-        const results = await execute(cfg, brevo, email, actions, url.origin);
+        const results = await execute(cfg, brevo, email, actions);
         // Log action kinds only, never the address.
         console.info('moonbase-webhook', event, results.map((r) => `${r.action.kind}:${r.done ? 'done' : r.note}`).join(', '));
         return json({ ok: true, event, results: results.map((r) => ({ kind: r.action.kind, done: r.done, note: r.note })) });

@@ -1,7 +1,7 @@
 /*
  * Thin Brevo v3 and Moonbase Core API clients for the consent sync.
  * Reads are always allowed; every write goes through `execute()`, which is a no-op
- * unless CONSENT_SYNC_WRITES=true (and CONSENT_SYNC_DOI=true for DOI mails).
+ * unless CONSENT_SYNC_WRITES=true. Nothing here sends email.
  */
 import type { Action, BrevoContactState, ConsentConfig, MoonbasePrefs } from './logic';
 import { isRetryable } from './logic';
@@ -48,7 +48,12 @@ export function brevoClient(apiKey: string) {
             const res = await call('brevo', `${BREVO}/contacts/${encodeURIComponent(email)}?identifierType=email_id`, { headers }, [404]);
             if (res.status === 404) return { exists: false };
             const c = await res.json();
-            return { exists: true, listIds: Array.isArray(c.listIds) ? c.listIds : [], emailBlacklisted: !!c.emailBlacklisted };
+            return {
+                exists: true,
+                listIds: Array.isArray(c.listIds) ? c.listIds : [],
+                emailBlacklisted: !!c.emailBlacklisted,
+                listUnsubscribed: Array.isArray(c.listUnsubscribed) ? c.listUnsubscribed : []
+            };
         },
         /** Create or update; adds to listIds, never touches blacklist / opt-in attributes. */
         async upsertToList(email: string, listId: number, attributes: Record<string, unknown>) {
@@ -68,14 +73,6 @@ export function brevoClient(apiKey: string) {
                 method: 'POST', headers, body: JSON.stringify({ emails: [email] })
             }, [400]); // 400 = not in list
         },
-        /** Sends the DOI confirmation mail; contact joins listId only after the click. */
-        async doubleOptIn(email: string, listId: number, templateId: number, redirectionUrl: string, attributes: Record<string, unknown>) {
-            await call('brevo', `${BREVO}/contacts/doubleOptinConfirmation`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify({ email, includeListIds: [listId], templateId, redirectionUrl, attributes })
-            });
-        }
     };
 }
 export type BrevoClient = ReturnType<typeof brevoClient>;
@@ -113,8 +110,7 @@ export async function execute(
     cfg: ConsentConfig,
     brevo: BrevoClient | null,
     email: string,
-    actions: Action[],
-    origin: string
+    actions: Action[]
 ): Promise<ExecResult[]> {
     const out: ExecResult[] = [];
     for (const action of actions) {
@@ -126,17 +122,11 @@ export async function execute(
                 // No OPT_IN / DOUBLE_OPT-IN or other consent attributes.
                 await brevo.upsertToList(email, action.listId, action.purchased ? { PURCHASED: true } : {});
                 break;
-            case 'move_prospect_to_news':
-                await brevo.addToList(email, action.addListId);
-                for (const id of action.removeListIds) await brevo.removeFromList(email, id);
+            case 'add_to_news':
+                await brevo.addToList(email, action.listId);
                 break;
             case 'remove_from_news':
                 await brevo.removeFromList(email, action.listId);
-                break;
-            case 'trigger_doi_news':
-                if (!cfg.doiEnabled) { out.push({ action, done: false, note: 'DOI mail not sent (CONSENT_SYNC_DOI not true)' }); continue; }
-                await brevo.doubleOptIn(email, action.listId, action.templateId,
-                    cfg.doiRedirectUrl ?? `${origin}/tuning-pack/confirmed`, { SIGNUP_SOURCE: 'moonbase:order' });
                 break;
         }
         out.push({ action, done: true });
