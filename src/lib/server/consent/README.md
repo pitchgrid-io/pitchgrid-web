@@ -37,4 +37,5 @@ Moonbase's own Newsletter / Product updates checkboxes are hidden in our embed
 pitchgrid.moonbase.sh (checkout, manage-preferences) are not affected by that option.
 
 Legal: no UWG §7(3) existing-customer exception (Lex, 2026-10-08). owners-service gets service content only;
-owners-news is opt-in + DOI only. Nothing here sets OPT_IN / DOUBLE_OPT-IN attributes.
+owners-news is opt-in + DOI only. Nothing here sets OPT_IN / DOUBLE_OPT-IN attributes. `PURCHASED=true` is set only for a real paid order
+(amount > 0, not fully refunded), never for €0 coupon orders or granted licences, and is never cleared by this code.

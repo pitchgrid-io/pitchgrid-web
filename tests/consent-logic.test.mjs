@@ -98,6 +98,15 @@ test('brevo opt-out events and Moonbase patch body', () => {
     assert.deepEqual(L.moonbaseOptOutPatch(), { communicationPreferences: { newsletterOptIn: false } });
 });
 
+test('PURCHASED only for real paid orders', () => {
+    assert.equal(L.planForOwner(cfg, off, none)[0].purchased, false); // default: not paid (granted / prefs)
+    assert.equal(L.planForOwner(cfg, off, none, true)[0].purchased, true);
+    assert.ok(L.isPaidOrder({ total: { due: { amount: 42 } }, isFullyRefunded: false }));
+    assert.ok(!L.isPaidOrder({ total: { due: { amount: 0 } } }));          // €0 coupon order
+    assert.ok(!L.isPaidOrder({ total: { due: { amount: 42 } }, isFullyRefunded: true }));
+    assert.ok(!L.isPaidOrder(null));
+});
+
 test('retryable statuses', () => {
     assert.ok(L.isRetryable(0) && L.isRetryable(429) && L.isRetryable(503));
     assert.ok(!L.isRetryable(400) && !L.isRetryable(401) && !L.isRetryable(404));

@@ -72,7 +72,7 @@ for (const c of customers) {
         count(brevoState, !contact.exists ? 'not in Brevo' : contact.emailBlacklisted ? 'in Brevo, blacklisted' :
             `in Brevo, lists [${contact.listIds.sort((a, b) => a - b).join(',')}]`);
     }
-    const news = L.planForOwner(cfg, prefs, contact).find((a) => a.kind !== 'upsert_owner_service');
+    const news = L.planForOwner(cfg, prefs, contact, kind === 'paid').find((a) => a.kind !== 'upsert_owner_service');
     count(plans, `${kind.padEnd(10)} ${news.kind === 'skip' ? 'service only (' + news.reason + ')' : news.kind}`);
 }
 

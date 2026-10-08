@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { planForOwner, planForPrefsChange, readConfig, verifyMoonbaseSignature, type Action } from '$lib/server/consent/logic';
+import { isPaidOrder, planForOwner, planForPrefsChange, readConfig, verifyMoonbaseSignature, type Action } from '$lib/server/consent/logic';
 import { brevoClient, DownstreamError, execute, moonbaseClient } from '$lib/server/consent/clients';
 
 /*
@@ -79,7 +79,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
             if (!email) return json({ ok: true, skipped: 'no email on order' });
             const customer = await moonbase.getCustomer(payload.customer?.id || email);
             const contact = await brevo.getContact(email);
-            actions = planForOwner(cfg, customer?.prefs ?? null, contact);
+            actions = planForOwner(cfg, customer?.prefs ?? null, contact, isPaidOrder(data));
         } else {
             const id = payload.customer?.id ?? data.id;
             const customer = id ? await moonbase.getCustomer(String(id)) : null;

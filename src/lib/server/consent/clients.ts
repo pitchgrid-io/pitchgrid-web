@@ -122,8 +122,9 @@ export async function execute(
         if (!cfg.writesEnabled || !brevo) { out.push({ action, done: false, note: 'dry-run (CONSENT_SYNC_WRITES not true)' }); continue; }
         switch (action.kind) {
             case 'upsert_owner_service':
-                // PURCHASED is an existing Brevo attribute. No OPT_IN / DOUBLE_OPT-IN here.
-                await brevo.upsertToList(email, action.listId, { PURCHASED: true });
+                // PURCHASED (existing Brevo attribute) only for a real paid order; never cleared here.
+                // No OPT_IN / DOUBLE_OPT-IN or other consent attributes.
+                await brevo.upsertToList(email, action.listId, action.purchased ? { PURCHASED: true } : {});
                 break;
             case 'move_prospect_to_news':
                 await brevo.addToList(email, action.addListId);

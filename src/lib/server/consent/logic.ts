@@ -115,7 +115,7 @@ export type BrevoContactState =
     | { exists: true; listIds: number[]; emailBlacklisted: boolean };
 
 export type Action =
-    | { kind: 'upsert_owner_service'; listId: number }
+    | { kind: 'upsert_owner_service'; listId: number; /** sets PURCHASED=true; only for a real paid order */ purchased: boolean }
     | { kind: 'move_prospect_to_news'; addListId: number; removeListIds: number[] }
     | { kind: 'trigger_doi_news'; listId: number; templateId: number }
     | { kind: 'remove_from_news'; listId: number }
@@ -128,13 +128,15 @@ export const optedIn = (p: MoonbasePrefs | null | undefined) =>
 export function planForOwner(
     cfg: ConsentConfig,
     prefs: MoonbasePrefs | null,
-    brevo: BrevoContactState
+    brevo: BrevoContactState,
+    /** true only for a completed order with an amount > 0 (not €0 coupons, not granted licences) */
+    paidOrder = false
 ): Action[] {
     const actions: Action[] = [];
     const { ownersService, ownersNews } = cfg.lists;
 
     // 1. Every owner goes to owners-service (contract basis, service mails only).
-    if (ownersService) actions.push({ kind: 'upsert_owner_service', listId: ownersService });
+    if (ownersService) actions.push({ kind: 'upsert_owner_service', listId: ownersService, purchased: paidOrder });
     else actions.push({ kind: 'skip', reason: 'BREVO_LIST_OWNERS_SERVICE not set' });
 
     // 2. owners-news only with consent we can prove.
@@ -193,6 +195,11 @@ export function planForPrefsChange(
     return planForOwner({ ...cfg, lists: { ...cfg.lists, ownersService: undefined } }, prefs, brevo).filter(
         (a) => !(a.kind === 'skip' && a.reason === 'BREVO_LIST_OWNERS_SERVICE not set')
     );
+}
+
+/** PURCHASED means a real paid order: amount due > 0 and not fully refunded. */
+export function isPaidOrder(order: { total?: { due?: { amount?: number } }; isFullyRefunded?: boolean } | null | undefined): boolean {
+    return !!order && (order.total?.due?.amount ?? 0) > 0 && !order.isFullyRefunded;
 }
 
 /** Which Brevo marketing webhook events mean "stop marketing to me". */
