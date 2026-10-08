@@ -1,5 +1,5 @@
 /*
- * Website signup (Newsletter + Tuning Pack forms -> /api/subscribe). Pure logic, no network,
+ * Website signup (mailing list form -> /api/subscribe). Pure logic, no network,
  * no SvelteKit imports, so it can be unit tested in plain Node.
  *
  * Decided 2026-10-08 (owner): double opt-in is NOT a gate any more.

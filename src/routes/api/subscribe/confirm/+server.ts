@@ -1,13 +1,14 @@
 import { redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { PACK_PAGE } from '$lib/consent/signupCopy';
+import { CONFIRMED_PAGE } from '$lib/consent/signupCopy';
 import { confirmAttributes, readSubscribeConfig, verifyConfirmToken } from '$lib/server/subscribe/logic';
 
 /*
  * Link in the optional confirmation email: /api/subscribe/confirm?t=<signed token>.
  * Measurement only. A valid token sets DOUBLE_OPT-IN=Yes on the Brevo contact (plus DOI_CONFIRMED /
  * DOI_CONFIRMED_AT once created and listed in BREVO_PROOF_ATTRIBUTES). It never changes lists:
- * the contact was added when the form was submitted. Everyone is sent on to the pack page.
+ * the contact was added when the form was submitted. Valid links land on /newsletter/confirmed,
+ * invalid or expired ones on the homepage.
  * Note: some mail security scanners open links automatically, so treat clicks as an upper bound.
  */
 export const GET: RequestHandler = async ({ url }) => {
@@ -31,5 +32,5 @@ export const GET: RequestHandler = async ({ url }) => {
         console.info(JSON.stringify({ event: 'subscribe.confirm_invalid' }));
     }
 
-    redirect(303, `${PACK_PAGE}?via=${verified ? 'email' : 'link'}`);
+    redirect(303, verified ? `${CONFIRMED_PAGE}?via=email` : '/');
 };

@@ -2,40 +2,36 @@
 	import { onMount } from 'svelte';
 	import { PRICE_LABEL, TRIAL_DAYS } from '$lib/shop/pricing';
 
-	const PACK_URL = '/downloads/pitchgrid-tuning-pack.zip';
-
 	onMount(() => {
-		// via=email: clicked the (optional) confirmation email; otherwise came from the signup form.
-		const via = new URLSearchParams(location.search).get('via') === 'email' ? 'email' : 'form';
+		// via=email: arrived from the (optional) confirmation email link.
+		const via = new URLSearchParams(location.search).get('via') === 'email' ? 'email' : 'other';
 		const plausible = (window as Window & { plausible?: (e: string, o?: object) => void }).plausible;
-		plausible?.('Tuning Pack Confirmed', { props: { via } });
+		plausible?.('Newsletter Confirmed', { props: { via } });
 	});
 </script>
 
 <svelte:head>
-	<title>You're in — download the PitchGrid Tuning Pack</title>
+	<title>Thanks, you're confirmed | PitchGrid</title>
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
 <main class="confirmed">
 	<section class="card">
-		<p class="eyebrow">You're on the list</p>
-		<h1>Thanks, you're in</h1>
-		<p class="lead">Here is your PitchGrid Tuning Pack: 19 curated Scala tunings, keyboard gamuts, 171 MOS scales and a guide to 10 tunings.</p>
-		<a class="primary" href={PACK_URL} download data-plausible-label="Download Tuning Pack">Download the Tuning Pack (.zip)</a>
-		<p class="hint">Start with <code>README.md</code> in the zip. Bookmark this page if you want to download it again later.</p>
+		<p class="eyebrow">PitchGrid mailing list</p>
+		<h1>Thanks, you're confirmed</h1>
+		<p class="lead">You're on the PitchGrid mailing list. We'll send news about PitchGrid: new releases, features and events. Every email has an unsubscribe link.</p>
 
 		<hr />
 
-		<h2>Play them live instead of loading files</h2>
+		<h2>Hear it for yourself</h2>
 		<p>
-			Every tuning in the pack is a PitchGrid preset. In the plugin you move between them with the
-			<em>skew</em> and <em>stretch</em> knobs and hear the change as you turn. PitchGrid retunes your
-			synths over MPE or MTS-ESP and maps any scale onto your piano keys. VST3/AU/CLAP for macOS and Windows.
+			PitchGrid lets you move between tunings live with the <em>skew</em> and <em>stretch</em> knobs
+			and hear the change as you turn. It retunes your synths over MPE or MTS-ESP and maps any scale
+			onto your piano keys. VST3/AU/CLAP for macOS and Windows.
 		</p>
 		<div class="ctas">
-			<a class="primary" href="/download?utm_source=tuning-pack&utm_medium=web&utm_campaign=doi-confirmed" data-plausible-label="Trial Download">Try free for {TRIAL_DAYS} days</a>
-			<a class="secondary" href="/buy?utm_source=tuning-pack&utm_medium=web&utm_campaign=doi-confirmed" data-plausible-label="Buy PitchGrid">Buy {PRICE_LABEL} — one-time license</a>
+			<a class="primary" href="/download?utm_source=newsletter&utm_medium=email&utm_campaign=signup-confirmed" data-plausible-label="Trial Download">Try free for {TRIAL_DAYS} days</a>
+			<a class="secondary" href="/buy?utm_source=newsletter&utm_medium=email&utm_campaign=signup-confirmed" data-plausible-label="Buy PitchGrid">Buy {PRICE_LABEL} — one-time license</a>
 		</div>
 		<p class="hint">Full features during the trial, no card needed.</p>
 	</section>
@@ -82,9 +78,6 @@
 	em {
 		color: #ffab00;
 		font-style: normal;
-	}
-	code {
-		color: #ffcc40;
 	}
 	.primary,
 	.secondary {

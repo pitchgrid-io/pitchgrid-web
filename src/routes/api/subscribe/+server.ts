@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { CONSENT_TEXT_VERSION, KNOWN_CONSENT_VERSIONS, PACK_PAGE } from '$lib/consent/signupCopy';
+import { CONSENT_TEXT_VERSION, KNOWN_CONSENT_VERSIONS, SUCCESS_MESSAGE } from '$lib/consent/signupCopy';
 import {
     alreadyConfirmed,
     isBlocked,
@@ -13,7 +13,7 @@ import {
 } from '$lib/server/subscribe/logic';
 
 /*
- * Newsletter / Tuning Pack signup. Decided 2026-10-08: double opt-in is no longer a gate.
+ * Mailing list signup (footer form). Decided 2026-10-08: double opt-in is no longer a gate.
  *
  * Submitting the form is the consent (no checkbox). We create or update the contact in Brevo and
  * add it to the prospects list right away. Blacklisted / unsubscribed contacts are never re-added:
@@ -34,12 +34,11 @@ import {
  */
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const SOURCES = new Set(['home', 'download', 'footer', 'confirmed', 'other']);
+const SOURCES = new Set(['home', 'download', 'footer', 'other']);
 const BREVO = 'https://api.brevo.com/v3';
 
 /** Same answer for real signups, bots (honeypot) and blocked contacts. */
-const neutralSuccess = () =>
-    json({ success: true, message: "You're on the list. Here's your Tuning Pack:", packUrl: PACK_PAGE });
+const neutralSuccess = () => json({ success: true, message: SUCCESS_MESSAGE });
 
 export const POST: RequestHandler = async ({ request, url }) => {
     const apiKey = process.env.BREVO_API_KEY?.trim();

@@ -3,7 +3,6 @@
     import { page } from '$app/stores';
     import { PRICE_LABEL, PRICE_LABEL_ALL, PRICE_NOTE, TRIAL_DAYS } from '$lib/shop/pricing';
     import { carryUtm } from '$lib/actions/carryUtm';
-    import TuningPackSignup from '$lib/components/TuningPackSignup.svelte';
 
     export let data: PageData;
 
@@ -85,10 +84,6 @@
             <span aria-hidden="true"> · </span>
             <a href="/privacy">Privacy</a>
         </p>
-    </section>
-
-    <section class="signup">
-        <TuningPackSignup source="download" compact={false} />
     </section>
 
     {#if data.legacy.length > 0}
@@ -213,10 +208,6 @@
         margin: 0.75rem auto 0;
         color: #f1f2f4a0;
         font-size: 0.9rem;
-    }
-    .signup {
-        width: 100%;
-        max-width: 960px;
     }
     .buy-cta {
         display: inline-block;

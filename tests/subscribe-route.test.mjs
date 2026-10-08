@@ -50,11 +50,12 @@ const post = (body) =>
     });
 
 test('new signup: added to list 6 at once, no DOI endpoint, no email by default', async () => {
-    const res = await post({ email: 'A@Example.com', source: 'home', consentVersion: '2026-10-08-v1', page: 'https://pitchgrid.io/?utm_source=x' });
+    const res = await post({ email: 'A@Example.com', source: 'home', consentVersion: '2026-10-08-v2', page: 'https://pitchgrid.io/?utm_source=x' });
     const data = await res.json();
     assert.equal(res.status, 200);
     assert.equal(data.success, true);
-    assert.equal(data.packUrl, '/tuning-pack/confirmed');
+    assert.equal(data.message, "You're on the list.");
+    assert.equal(data.packUrl, undefined);
     const create = calls.find((c) => c.method === 'POST' && c.url.endsWith('/contacts'));
     assert.deepEqual(create.body.listIds, [6]);
     assert.equal(create.body.updateEnabled, true);
@@ -150,7 +151,7 @@ test('confirm click: valid token sets DOUBLE_OPT-IN, never touches lists, redire
     process.env.BREVO_PROOF_ATTRIBUTES = 'DOI_CONFIRMED,DOI_CONFIRMED_AT';
     const r = await clickConfirm(await L.signConfirmToken('sec', 501));
     assert.equal(r.status, 303);
-    assert.equal(r.location, '/tuning-pack/confirmed?via=email');
+    assert.equal(r.location, '/newsletter/confirmed?via=email');
     assert.equal(calls.length, 1);
     assert.equal(calls[0].method, 'PUT');
     assert.match(calls[0].url, /\/contacts\/501\?identifierType=contact_id$/);
@@ -164,6 +165,42 @@ test('confirm click: bad token writes nothing', async () => {
     process.env.SUBSCRIBE_CONFIRM_SECRET = 'sec';
     const r = await clickConfirm(await L.signConfirmToken('wrong', 501));
     assert.equal(r.status, 303);
-    assert.equal(r.location, '/tuning-pack/confirmed?via=link');
+    assert.equal(r.location, '/');
     assert.equal(calls.length, 0);
+});
+
+test('consent proof records the text version (v2 default, v1 still accepted, unknown -> current)', async () => {
+    const logged = [];
+    console.info = (line) => logged.push(JSON.parse(line));
+    await post({ email: 'j@example.com', source: 'footer' });
+    await post({ email: 'k@example.com', source: 'footer', consentVersion: '2026-10-08-v1' });
+    await post({ email: 'l@example.com', source: 'footer', consentVersion: 'bogus' });
+    assert.deepEqual(logged.filter((l) => l.event === 'subscribe.consent').map((l) => l.textVersion), ['2026-10-08-v2', '2026-10-08-v1', '2026-10-08-v2']);
+    assert.ok(logged.every((l) => !JSON.stringify(l).includes('@')));
+});
+
+test('redirect-only routes (retired URLs) redirect permanently', async () => {
+    const { readdirSync, existsSync, readFileSync, statSync } = await import('node:fs');
+    const targets = [];
+    const walk = async (dir) => {
+        for (const name of readdirSync(dir)) {
+            const p = join(dir, name);
+            if (!statSync(p).isDirectory()) continue;
+            const ts = join(p, '+page.ts');
+            if (existsSync(ts) && !existsSync(join(p, '+page.svelte')) && readFileSync(ts, 'utf8').includes('redirect(')) {
+                const mod = await loadRoute(ts);
+                try {
+                    mod.load({});
+                    assert.fail(`expected redirect from ${p}`);
+                } catch (e) {
+                    assert.equal(e.status, 308, p);
+                    targets.push(e.location);
+                }
+            }
+            await walk(p);
+        }
+    };
+    await walk('src/routes');
+    assert.ok(targets.includes('/'), 'a retired page redirects to the homepage');
+    assert.ok(targets.includes('/newsletter/confirmed'), 'the old confirmed page redirects to /newsletter/confirmed');
 });

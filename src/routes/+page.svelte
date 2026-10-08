@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
 	import { PRICE_LABEL, PRICE_LABEL_ALL, PRICE_NOTE, TRIAL_DAYS } from '$lib/shop/pricing';
 	import { carryUtm } from '$lib/actions/carryUtm';
-	import TuningPackSignup from '$lib/components/TuningPackSignup.svelte';
 </script>
 
 <style>
@@ -1207,7 +1206,7 @@
 		</ul>
 	</section>
 
-	<!-- Final CTA + Tuning Pack signup -->
+	<!-- Final CTA -->
 	<section class="section final-cta">
 		<h2>Hear It for Yourself</h2>
 		<p class="section-intro">
@@ -1221,7 +1220,6 @@
 			macOS &amp; Windows · VST3 · AU · CLAP · full features in the trial, no card
 			{#if PRICE_NOTE}<br />{PRICE_NOTE}{/if}
 		</p>
-		<TuningPackSignup source="home" />
 	</section>
 
 	<!-- Contact Section -->
