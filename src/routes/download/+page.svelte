@@ -5,7 +5,6 @@
     import { carryUtm } from '$lib/actions/carryUtm';
     import { MOONBASE_LOGIN_URL, MOONBASE_RESET_URL } from '$lib/shop/moonbase';
     import { moonbaseIntent } from '$lib/shop/moonbaseEmbed';
-    import TuningPackSignup from '$lib/components/TuningPackSignup.svelte';
 
     export let data: PageData;
 
@@ -87,10 +86,6 @@
             <span aria-hidden="true"> · </span>
             <a href="/privacy">Privacy</a>
         </p>
-    </section>
-
-    <section class="signup">
-        <TuningPackSignup source="download" compact={false} />
     </section>
 
     {#if data.legacy.length > 0}
@@ -215,10 +210,6 @@
         margin: 0.75rem auto 0;
         color: #f1f2f4a0;
         font-size: 0.9rem;
-    }
-    .signup {
-        width: 100%;
-        max-width: 960px;
     }
     .buy-cta {
         display: inline-block;

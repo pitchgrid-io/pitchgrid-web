@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { BUTTON_NEWSLETTER, CONSENT_TEXT, CONSENT_TEXT_VERSION } from '$lib/consent/signupCopy';
+	import { BUTTON_NEWSLETTER, CONSENT_TEXT, CONSENT_TEXT_VERSION, SUCCESS_MESSAGE } from '$lib/consent/signupCopy';
 
 	let email = '';
 	let name = '';
 	let message = '';
 	let loading = false;
 	let success = false;
-	let packUrl = '';
 
 	async function handleSubmit() {
 		if (!email || loading) return;
@@ -31,9 +30,10 @@
 			const data = await res.json();
 
 			if (data.success) {
-				message = data.message || "You're on the list.";
-				packUrl = data.packUrl || '';
+				message = data.message || SUCCESS_MESSAGE;
 				success = true;
+				const plausible = (window as Window & { plausible?: (e: string, o?: object) => void }).plausible;
+				plausible?.('Newsletter Signup', { props: { source: 'footer' } });
 				email = '';
 				name = '';
 			} else {
@@ -49,7 +49,7 @@
 
 <div class="newsletter">
 	<h3>Stay updated</h3>
-	<p class="intro">Join the PitchGrid mailing list for updates, new tools, and events. Join and get the free <a href="/tuning-pack">Tuning Pack</a>.</p>
+	<p class="intro">Join the PitchGrid mailing list for updates, new tools, and events.</p>
 	
 	<form on:submit|preventDefault={handleSubmit}>
 		<input 
@@ -72,10 +72,7 @@
 	</form>
 
 	{#if message}
-		<p class:success>
-			{message}
-			{#if success && packUrl}<a href={packUrl}>Download the Tuning Pack</a>{/if}
-		</p>
+		<p class:success>{message}</p>
 	{/if}
 </div>
 
@@ -129,8 +126,7 @@
 		line-height: 1.4;
 	}
 
-	.consent a,
-	.success a {
+	.consent a {
 		color: #FFAB00;
 	}
 

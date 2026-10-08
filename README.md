@@ -33,17 +33,17 @@ Without `BREVO_API_KEY`, `/api/subscribe` answers 503 and the forms show a frien
 
 `src/lib/shop/pricing.ts` is the only place with the price (`PRICE_AMOUNT`) and trial length. All CTAs, `/buy` and `/download` read from it. The real price is set in Moonbase; change both together. `PRICE_NOTE` (empty by default) adds a one-line note under the buy buttons, e.g. ahead of a price change.
 
-## Newsletter and Tuning Pack (signup)
+## Mailing list (signup)
 
-The signup forms (homepage, `/download`, `/tuning-pack`, footer) POST to `/api/subscribe`. Submitting the form is the consent (no checkbox; button and consent line come from `src/lib/consent/signupCopy.ts`, bump `CONSENT_TEXT_VERSION` when the wording changes). The endpoint creates or updates the Brevo contact and adds it to the prospects list right away; the success message links `/tuning-pack/confirmed`, which hands out the pack. Contacts that Brevo has blacklisted or that unsubscribed from any list are never re-added: they get the same neutral success and nothing changes.
+The footer form (`src/lib/components/Newsletter.svelte`, on every page) POSTs to `/api/subscribe`. Submitting the form is the consent (no checkbox; button, consent line and success message come from `src/lib/consent/signupCopy.ts`, bump `CONSENT_TEXT_VERSION` when the wording changes). The endpoint creates or updates the Brevo contact and adds it to the prospects list right away; the form then shows "You're on the list." Contacts that Brevo has blacklisted or that unsubscribed from any list are never re-added: they get the same neutral success and nothing changes.
 
-Attributes written (all exist in Brevo): `SIGNUP_SOURCE` (`web:home`, `web:download`, …), `OPT_IN=true`, `FIRSTNAME` (footer form), `CK1_WAITLIST=true` if the CK1 box was ticked (never set to false). Proof of consent (form, timestamp, page URL, consent text version) is logged server-side as `subscribe.consent` with the Brevo contact id, never the email. Once `CONSENT_AT`, `CONSENT_URL` and `CONSENT_TEXT_VERSION` exist in Brevo (type text) and are listed in `BREVO_PROOF_ATTRIBUTES`, they are written on the contact too. Vercel keeps runtime logs only briefly, so creating those attributes is the durable option.
+Attributes written (all exist in Brevo): `SIGNUP_SOURCE` (`web:footer`, …), `OPT_IN=true`, `FIRSTNAME` (if given), `CK1_WAITLIST=true` if a form sends `ck1: true` (no current form does; never set to false). Proof of consent (form, timestamp, page URL, consent text version) is logged server-side as `subscribe.consent` with the Brevo contact id, never the email, and written to `CONSENT_AT`, `CONSENT_URL` and `CONSENT_TEXT_VERSION` (Brevo text attributes) when they are listed in `BREVO_PROOF_ATTRIBUTES`.
 
-Optional confirmation email (measurement only): with `SUBSCRIBE_CONFIRM_EMAIL=true`, `BREVO_CONFIRM_TEMPLATE_ID` and `SUBSCRIBE_CONFIRM_SECRET` set, new or unconfirmed contacts get a transactional email whose link `/api/subscribe/confirm?t=<HMAC token with the contact id>` sets Brevo's `DOUBLE_OPT-IN=Yes` (plus `DOI_CONFIRMED=true` / `DOI_CONFIRMED_AT` once created and listed) and redirects to `/tuning-pack/confirmed?via=email`. List membership never depends on the click. Mail scanners may open links automatically, so read click rates as an upper bound.
+Optional confirmation email (measurement only): with `SUBSCRIBE_CONFIRM_EMAIL=true`, `BREVO_CONFIRM_TEMPLATE_ID` and `SUBSCRIBE_CONFIRM_SECRET` set, new or unconfirmed contacts get a transactional email whose link `/api/subscribe/confirm?t=<HMAC token with the contact id>` sets Brevo's `DOUBLE_OPT-IN=Yes` (plus `DOI_CONFIRMED=true` / `DOI_CONFIRMED_AT` when listed) and redirects to `/newsletter/confirmed?via=email` (invalid or expired links go to the homepage). List membership never depends on the click. Mail scanners may open links automatically, so read click rates as an upper bound.
+
+Retired page URLs redirect permanently (308) to `/` and `/newsletter/confirmed`, same mechanism as `/datenschutz`: a route with only a `+page.ts` whose load calls `redirect()`.
 
 Tests: `npm run test:subscribe`.
-
-The pack itself is `static/downloads/pitchgrid-tuning-pack.zip`, built by `node utility/tuning-pack/build-tuning-pack.mjs` from the PitchGrid preset table (`utility/tuning-pack/move-presets.json`, from move-anything-pitchgrid) and the guide `utility/tuning-pack/GUIDE.md`. The build is deterministic; rerun it after editing either file.
 
 ## Campaign links (UTM)
 
