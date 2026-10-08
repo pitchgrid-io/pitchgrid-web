@@ -1,13 +1,15 @@
 <script lang="ts">
+	import { BUTTON_NEWSLETTER, CONSENT_TEXT, CONSENT_TEXT_VERSION } from '$lib/consent/signupCopy';
+
 	let email = '';
 	let name = '';
 	let message = '';
 	let loading = false;
 	let success = false;
-	let consent = false;
+	let packUrl = '';
 
 	async function handleSubmit() {
-		if (!email || !consent) return;
+		if (!email || loading) return;
 
 		loading = true;
 		message = '';
@@ -17,17 +19,23 @@
 			const res = await fetch('/api/subscribe', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email, name, consent, source: 'footer' })
+				body: JSON.stringify({
+					email,
+					name,
+					source: 'footer',
+					consentVersion: CONSENT_TEXT_VERSION,
+					page: location.origin + location.pathname
+				})
 			});
 
 			const data = await res.json();
 
 			if (data.success) {
-				message = data.message || 'Almost there — check your inbox to confirm.';
+				message = data.message || "You're on the list.";
+				packUrl = data.packUrl || '';
 				success = true;
 				email = '';
 				name = '';
-				consent = false;
 			} else {
 				message = data.error || 'Subscription failed. Please try again.';
 			}
@@ -41,7 +49,7 @@
 
 <div class="newsletter">
 	<h3>Stay updated</h3>
-	<p class="intro">Join the PitchGrid mailing list for updates, new tools, and events. Confirm by email and get the free <a href="/tuning-pack">Tuning Pack</a>.</p>
+	<p class="intro">Join the PitchGrid mailing list for updates, new tools, and events. Join and get the free <a href="/tuning-pack">Tuning Pack</a>.</p>
 	
 	<form on:submit|preventDefault={handleSubmit}>
 		<input 
@@ -57,26 +65,17 @@
 			required 
 			disabled={loading}
 		/>
-		<label class="consent">
-			<input
-				type="checkbox"
-				bind:checked={consent}
-				required
-				disabled={loading}
-			/>
-			<span>
-				Email me PitchGrid news from Bayes GmbH and the free Tuning Pack (about 1–2 emails a month).
-				I'll confirm by email and can unsubscribe at any time.
-				<a href="/privacy">Privacy policy</a>
-			</span>
-		</label>
-		<button type="submit" disabled={loading || !email || !consent}>
-			{loading ? 'Subscribing...' : 'Subscribe'}
+		<button type="submit" disabled={loading || !email}>
+			{loading ? 'Joining…' : BUTTON_NEWSLETTER}
 		</button>
+		<p class="consent">{CONSENT_TEXT} <a href="/privacy">Privacy policy</a></p>
 	</form>
 
 	{#if message}
-		<p class:success>{message}</p>
+		<p class:success>
+			{message}
+			{#if success && packUrl}<a href={packUrl}>Download the Tuning Pack</a>{/if}
+		</p>
 	{/if}
 </div>
 
@@ -123,23 +122,16 @@
 		border-color: #FFAB00;
 	}
 
-	.consent {
-		display: flex;
-		align-items: flex-start;
-		gap: 0.5rem;
-		color: #ccc;
-		font-size: 0.85rem;
+	.newsletter p.consent {
+		margin: 0;
+		color: #b8b8b8;
+		font-size: 0.8rem;
 		line-height: 1.4;
-		cursor: pointer;
 	}
 
-	.consent input[type="checkbox"] {
-		margin-top: 0.2rem;
-		flex-shrink: 0;
-		width: auto;
-		padding: 0;
-		accent-color: #FFAB00;
-		cursor: pointer;
+	.consent a,
+	.success a {
+		color: #FFAB00;
 	}
 
 	button {
@@ -169,7 +161,7 @@
 		font-size: 0.9rem;
 	}
 
-	:global(.newsletter p:not(.success):not(.intro)) {
+	:global(.newsletter p:not(.success):not(.intro):not(.consent)) {
 		color: #ff6b6b;
 		font-size: 0.9rem;
 		margin-top: 0.5rem;

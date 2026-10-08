@@ -1,6 +1,6 @@
 # PitchGrid Tuning Pack
 
-Thanks for confirming your subscription. This pack has Scala (`.scl`) tuning files
+Thanks for joining the PitchGrid mailing list. This pack has Scala (`.scl`) tuning files
 taken from the PitchGrid presets. They work in any synth that loads Scala files,
 for example Surge XT, Vital and Pianoteq, and many others.
 
