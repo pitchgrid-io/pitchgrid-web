@@ -8,7 +8,9 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "dev-x": "vite dev --host --port 3000"
+    "dev-x": "vite dev --host --port 3000",
+    "test:consent": "node --test tests/",
+    "backfill:owners:dry-run": "node scripts/backfill-owners-dryrun.mjs"
   },
   "devDependencies": {
     "@bulatdashiev/svelte-slider": "^1.0.3",
