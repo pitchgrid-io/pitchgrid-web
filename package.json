@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "dev-x": "vite dev --host --port 3000"
+    "dev-x": "vite dev --host --port 3000",
+    "test:subscribe": "node --test tests/"
   },
   "devDependencies": {
     "@bulatdashiev/svelte-slider": "^1.0.3",

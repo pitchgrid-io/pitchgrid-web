@@ -1,6 +1,8 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import { MOONBASE_BUY_URL } from '$lib/shop/moonbase';
+    import { page } from '$app/stores';
+    import { PRICE_LABEL, PRICE_LABEL_ALL, PRICE_NOTE, TRIAL_DAYS } from '$lib/shop/pricing';
+    import { carryUtm } from '$lib/actions/carryUtm';
 
     export let data: PageData;
 
@@ -31,7 +33,8 @@
 </script>
 
 <svelte:head>
-    <title>Download PitchGrid</title>
+    <title>Download PitchGrid: free {TRIAL_DAYS}-day trial</title>
+    <meta name="description" content="Download the PitchGrid plugin for macOS and Windows. {TRIAL_DAYS}-day free trial with full features, no card. One-time license {PRICE_LABEL_ALL}." />
 </svelte:head>
 
 <main class="download-page">
@@ -40,7 +43,7 @@
         {#if data.latest}
             <p class="version">
                 Latest version <strong>{data.latest.version}</strong> · {fmtDate(data.latest.date)} ·
-                14-day free trial included
+                {TRIAL_DAYS}-day free trial included
             </p>
             <div class="platforms">
                 {#each latestAssets as asset}
@@ -51,20 +54,36 @@
                     </a>
                 {/each}
             </div>
-            <p class="trial-how">The 14-day trial is in the installer. No credit card — download, run, and play.</p>
-            <a class="buy-cta" href={MOONBASE_BUY_URL} target="_blank" rel="noopener" data-plausible-label="Get a license">Get a license — 42 €/$/£</a>
-            <p class="indiekey">
-                Existing Indiekey customers: sign in with the email on the old license.
-                Set a password via <a href="https://pitchgrid.moonbase.sh">Forgot password</a> if you have not used Moonbase.
-            </p>
-            <p class="legal-links">
-                <a href="/plugin-eula">EULA</a>
-                <span aria-hidden="true"> · </span>
-                <a href="/privacy">Privacy</a>
+        {:else if data.releasesError}
+            <p class="version">
+                The release list is not loading right now. Get the latest installers from
+                <a href="https://github.com/pitchgrid-io/pitchgrid-releases/releases/latest">GitHub releases</a>.
+                {TRIAL_DAYS}-day free trial included.
             </p>
         {:else}
             <p>No releases published yet — check back soon.</p>
         {/if}
+
+        <div class="trial-box">
+            <h2>How the trial works</h2>
+            <ul>
+                <li><strong>{TRIAL_DAYS} days, full features.</strong> The trial is built into the installer. No watermarks, no limits.</li>
+                <li><strong>No credit card.</strong> Download, run, play.</li>
+                <li><strong>Keep it with a one-time license.</strong> {PRICE_LABEL_ALL}, perpetual. No subscription.</li>
+            </ul>
+        </div>
+        <p class="like-it">Like it?</p>
+        <a class="buy-cta" href="/buy" use:carryUtm={$page.url.search} data-plausible-label="Get a license">Buy a license — {PRICE_LABEL}, one-time</a>
+        {#if PRICE_NOTE}<p class="price-note">{PRICE_NOTE}</p>{/if}
+        <p class="indiekey">
+            Existing Indiekey customers: sign in with the email on the old license.
+            Set a password via <a href="https://pitchgrid.moonbase.sh/forgot-password">Forgot password</a> if you have not used Moonbase.
+        </p>
+        <p class="legal-links">
+            <a href="/plugin-eula">EULA</a>
+            <span aria-hidden="true"> · </span>
+            <a href="/privacy">Privacy</a>
+        </p>
     </section>
 
     {#if data.legacy.length > 0}
@@ -154,16 +173,45 @@
         font-size: 0.8rem;
         color: #f1f2f470;
     }
-    .trial-how {
-        margin: 2rem auto 0;
+    .trial-box {
+        margin: 2.5rem auto 0;
         max-width: 36rem;
+        text-align: left;
+        background: #1a1d1f;
+        border: 1px solid #ffffff1f;
+        border-radius: 10px;
+        padding: 1.25rem 1.6rem;
+    }
+    .trial-box h2 {
+        font-size: 1.1rem;
+        margin: 0 0 0.6rem;
+        color: #ffab00;
+    }
+    .trial-box ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        line-height: 1.6;
+    }
+    .trial-box li {
+        margin-bottom: 0.35rem;
+    }
+    .trial-box strong {
         color: #f1f2f4;
-        font-size: 1.05rem;
-        line-height: 1.5;
+    }
+    .like-it {
+        margin: 2rem 0 0;
+        font-family: Rubik, system-ui, sans-serif;
+        font-size: 1.15rem;
+        color: #f1f2f4;
+    }
+    .price-note {
+        margin: 0.75rem auto 0;
+        color: #f1f2f4a0;
+        font-size: 0.9rem;
     }
     .buy-cta {
         display: inline-block;
-        margin-top: 1.5rem;
+        margin-top: 0.75rem;
         background: #ffab00;
         color: #131516;
         font-family: Rubik, system-ui, sans-serif;
@@ -190,7 +238,7 @@
         color: #f1f2f4a0;
         font-size: 0.9rem;
     }
-    .indiekey a, .legal-links a, .legacy a {
+    .version a, .indiekey a, .legal-links a, .legacy a {
         color: #ffab00;
     }
     .legacy {

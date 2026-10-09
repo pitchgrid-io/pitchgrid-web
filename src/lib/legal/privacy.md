@@ -1,6 +1,6 @@
 # Privacy Policy
 
-_Last updated: 24 August 2026_
+_Last updated: 8 October 2026_
 
 This policy explains how **Bayes GmbH** ("**Bayes**", "**we**", "**us**") processes personal data when you use **pitchgrid.io** and related PitchGrid services — including downloads, the mailing list, and plugin licensing.
 
@@ -49,11 +49,11 @@ We also use **Vercel Web Analytics** (Vercel Inc.) for cookieless, aggregated tr
 
 ### Mailing list
 
-If you subscribe, **Brevo** (Sendinblue SAS, France) stores your email address and, if you provide it, your name. Subscription is sent via `POST /api/subscribe`. Legal basis: Art. 6(1)(a) consent. We keep the data until you unsubscribe or ask us to delete it. Every mail includes an unsubscribe link. You can also email [peter@pitchgrid.io](mailto:peter@pitchgrid.io).
+If you subscribe to our mailing list, **Brevo** (Sendinblue SAS, France), our email service provider acting on our behalf, stores your email address and, if you provide them, your name, whether you asked for updates on the PitchGrid CK1 hardware, and which signup form you used. Subscription is sent via `POST /api/subscribe`. You are added to the mailing list when you submit the form. We then send you a confirmation email; you don't have to click its link, and if you do, we only note that you confirmed. As proof of your consent we record which form you used, the page, the time and the version of the consent text shown to you. If you have unsubscribed before, we don't add you again. Legal basis: consent, Art. 6(1)(a) GDPR. Every email we send has an unsubscribe link. You can withdraw your consent at any time via that link or by emailing [peter@pitchgrid.io](mailto:peter@pitchgrid.io); this doesn't affect processing before you withdrew. We keep the data until you unsubscribe or ask us to delete it. Our emails record whether they were opened and which links were clicked, so we can see what readers find useful. This is part of your consent and stops when you unsubscribe.
 
 ### Shop and licences
 
-Purchases and licence keys are handled by **Moonbase** ([https://pitchgrid.moonbase.sh](https://pitchgrid.moonbase.sh)). Moonbase processes accounts, payments, licence keys, and activations. Legal basis: Art. 6(1)(b). Moonbase’s own privacy policy applies to checkout. We receive the fact of a purchase and the licence email so we can support you.
+Purchases and licence keys are handled by **Moonbase** ([https://pitchgrid.moonbase.sh](https://pitchgrid.moonbase.sh)). Moonbase processes accounts, payments, licence keys, and activations. Legal basis: Art. 6(1)(b). If you arrive through a link with campaign parameters (for example `utm_source=newsletter`), we pass those parameters on to the Moonbase checkout. Moonbase stores them with your order, so we can see which campaign led to a purchase. We use them only for that and don't combine them with other data to build a profile of you. Nothing is stored on your device for this. Legal basis: Art. 6(1)(f) GDPR, our interest in knowing which campaigns work. Moonbase’s own privacy policy applies to checkout. We receive the fact of a purchase and your licence email so we can support you and send you service messages about the product you licensed (updates, fixes and licence changes). Legal basis: Art. 6(1)(b) GDPR. We send you news or offers only if you opted in, for example with the checkbox at checkout.
 
 ### Plugin activation
 

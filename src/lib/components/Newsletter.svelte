@@ -1,13 +1,14 @@
 <script lang="ts">
+	import { BUTTON_NEWSLETTER, CONSENT_TEXT, CONSENT_TEXT_VERSION, SUCCESS_MESSAGE } from '$lib/consent/signupCopy';
+
 	let email = '';
 	let name = '';
 	let message = '';
 	let loading = false;
 	let success = false;
-	let consent = false;
 
 	async function handleSubmit() {
-		if (!email || !consent) return;
+		if (!email || loading) return;
 
 		loading = true;
 		message = '';
@@ -17,17 +18,24 @@
 			const res = await fetch('/api/subscribe', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email, name })
+				body: JSON.stringify({
+					email,
+					name,
+					source: 'footer',
+					consentVersion: CONSENT_TEXT_VERSION,
+					page: location.origin + location.pathname
+				})
 			});
 
 			const data = await res.json();
 
 			if (data.success) {
-				message = data.message || 'Thank you for subscribing!';
+				message = data.message || SUCCESS_MESSAGE;
 				success = true;
+				const plausible = (window as Window & { plausible?: (e: string, o?: object) => void }).plausible;
+				plausible?.('Newsletter Signup', { props: { source: 'footer' } });
 				email = '';
 				name = '';
-				consent = false;
 			} else {
 				message = data.error || 'Subscription failed. Please try again.';
 			}
@@ -57,21 +65,10 @@
 			required 
 			disabled={loading}
 		/>
-		<label class="consent">
-			<input
-				type="checkbox"
-				bind:checked={consent}
-				required
-				disabled={loading}
-			/>
-			<span>
-				I agree to receive email updates about PitchGrid.
-				<a href="/privacy">See our privacy policy</a>.
-			</span>
-		</label>
-		<button type="submit" disabled={loading || !email || !consent}>
-			{loading ? 'Subscribing...' : 'Subscribe'}
+		<button type="submit" disabled={loading || !email}>
+			{loading ? 'Joining…' : BUTTON_NEWSLETTER}
 		</button>
+		<p class="consent">{CONSENT_TEXT} <a href="/privacy">Privacy policy</a></p>
 	</form>
 
 	{#if message}
@@ -122,23 +119,15 @@
 		border-color: #FFAB00;
 	}
 
-	.consent {
-		display: flex;
-		align-items: flex-start;
-		gap: 0.5rem;
-		color: #ccc;
-		font-size: 0.85rem;
+	.newsletter p.consent {
+		margin: 0;
+		color: #b8b8b8;
+		font-size: 0.8rem;
 		line-height: 1.4;
-		cursor: pointer;
 	}
 
-	.consent input[type="checkbox"] {
-		margin-top: 0.2rem;
-		flex-shrink: 0;
-		width: auto;
-		padding: 0;
-		accent-color: #FFAB00;
-		cursor: pointer;
+	.consent a {
+		color: #FFAB00;
 	}
 
 	button {
@@ -168,7 +157,7 @@
 		font-size: 0.9rem;
 	}
 
-	:global(.newsletter p:not(.success):not(.intro)) {
+	:global(.newsletter p:not(.success):not(.intro):not(.consent)) {
 		color: #ff6b6b;
 		font-size: 0.9rem;
 		margin-top: 0.5rem;
