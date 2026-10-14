@@ -21,8 +21,9 @@ export interface Baked {
 	kbdY: number;
 	bezTop: number;
 	keyNodeY: number;
-	nodes: { ci: number; lineY: number; lx: number; ly: number; label: string; on: number; root: number }[];
+	nodes: { id: string; ci: number; lineY: number; lx: number; ly: number; label: string; on: number; root: number }[];
 	segs: [number, number, number, number][];
+	segIdx: [number, number][];
 	drops: { i: number; ax: number }[];
 	keys: { x: number; w: number; b: number; r: number }[];
 	kn: { kx: number; i: number }[];
@@ -33,6 +34,14 @@ export interface Baked {
 }
 
 const BAKED = raw as unknown as Baked[];
+
+// Samples are blended index-wise, so every array must list the same notes in the
+// same order (identity = natural coordinate). Fail loudly if a re-bake breaks that.
+for (const b of BAKED) {
+	b.nodes.forEach((n, i) => {
+		if (n.id !== BAKED[0].nodes[i].id) throw new Error(`circle-unfolding data: node order differs at ${i}`);
+	});
+}
 
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
 

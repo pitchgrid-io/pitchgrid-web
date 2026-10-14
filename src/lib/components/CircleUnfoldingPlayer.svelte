@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { STEPS, DURATIONS, REST_TIMES, TOTAL, stateAt, restIndexAt, inTransition } from '$lib/circle-unfolding/timeline';
+	import { STEPS, DURATIONS, REST_TIMES, TOTAL, stateAt, stationPos, restIndexAt, inTransition } from '$lib/circle-unfolding/timeline';
 	import {
 		bakedFor, circlePositions, arcPath, isExtra, keyboardPaths,
 		LINE_X, PG_YELLOW, LIGHT
@@ -146,7 +146,9 @@
 	$: keys = keyboardPaths(g.keys);
 	const fillOf = (on: number, root: number) => (root ? PG_YELLOW : on ? LIGHT : 'gray');
 
-	$: progress = time / TOTAL;
+	// playhead and animation share the single `time` clock; no CSS tweening on the head
+	$: station = stationPos(time);
+	$: progress = station / LAST;
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex a11y-no-noninteractive-element-interactions -->
@@ -269,13 +271,13 @@
 			<div class="cu-timeline" style="--p: {progress}">
 				<div class="cu-track"></div>
 				<div class="cu-played"></div>
-				{#each REST_TIMES as rt, i}
+				{#each STEPS as _, i}
 					<button
 						type="button"
 						class="cu-dot"
-						class:done={rt <= time + 1e-6}
+						class:done={i <= station + 1e-6}
 						class:current={engaged && i === currentIdx}
-						style="left: {(rt / TOTAL) * 100}%"
+						style="left: {(i / LAST) * 100}%"
 						aria-label="Step {i + 1} of {STEPS.length}"
 						on:click|stopPropagation={() => goTo(i)}
 						on:pointerup|stopPropagation
@@ -364,11 +366,14 @@
 	.cu-dot.current { transform: scale(1.35); border-color: #fff; }
 	.cu-head {
 		position: absolute; top: 50%; left: calc(var(--p) * 100%);
-		width: 4px; height: 18px; margin: -9px 0 0 -2px;
-		border-radius: 2px;
+		width: 18px; height: 18px; margin: -9px 0 0 -9px;
+		border-radius: 50%;
 		background: #fff;
+		border: 3px solid #ffab00;
+		box-sizing: border-box;
 		box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
 		pointer-events: none;
+		transition: none;
 	}
 	@media (max-width: 520px) {
 		.cu-overlay { padding: 0.6rem 0 0; }

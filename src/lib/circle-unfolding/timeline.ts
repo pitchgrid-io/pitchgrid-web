@@ -123,3 +123,19 @@ export function stateAt(time: number): AnimState {
 	}
 	return REST_STATES[i];
 }
+
+/**
+ * Playhead position in "station units" (0 … STEPS.length-1), derived from the same
+ * `time` value that drives the animation: it sits exactly on station i while the
+ * animation rests in state i, and moves linearly with the progress of the
+ * transition between i and i+1 (slower for long steps, faster for short ones).
+ */
+export function stationPos(time: number): number {
+	const i = restIndexAt(time);
+	const next = i + 1;
+	if (next < STEPS.length) {
+		const start = REST_TIMES[next] - DURATIONS[next];
+		if (time > start && DURATIONS[next] > 0) return i + Math.min(1, (time - start) / DURATIONS[next]);
+	}
+	return i;
+}
