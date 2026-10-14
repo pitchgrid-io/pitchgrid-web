@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CircleUnfoldingPlayer from '$lib/components/CircleUnfoldingPlayer.svelte';
 	import { PRICE_LABEL, PRICE_LABEL_ALL, TRIAL_DAYS } from '$lib/shop/pricing';
 </script>
 
@@ -162,14 +163,6 @@
 		width: 100%;
 		margin: 0 auto;
 		display: block;
-	}
-
-	.hero-screenshot img,
-	.hero-screenshot video {
-		width: 100%;
-		height: auto;
-		border-radius: 12px;
-		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 171, 0, 0.1);
 	}
 
 	/* Container */
@@ -699,13 +692,7 @@
 			
 		</p>
 		<div class="hero-screenshot">
-			<video autoplay muted loop playsinline disablepictureinpicture
-				poster="/docs/images/PitchGridPluginUI.png"
-				alt="PitchGrid — from Circle of Fifths to the two-dimensional lattice">
-				<source src="/pitchgrid-anim.webm" type="video/webm" />
-				<source src="/pitchgrid-anim-web.mp4" type="video/mp4" />
-				<img src="/docs/images/PitchGridPluginUI.png" alt="PitchGrid Plugin" />
-			</video>
+			<CircleUnfoldingPlayer />
 		</div>
 	</div>
 </section>
