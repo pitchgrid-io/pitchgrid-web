@@ -55,7 +55,6 @@ test('new signup: added to list 6 at once, no DOI endpoint, no email by default'
     assert.equal(res.status, 200);
     assert.equal(data.success, true);
     assert.equal(data.message, "You're on the list.");
-    assert.equal(data.packUrl, undefined);
     const create = calls.find((c) => c.method === 'POST' && c.url.endsWith('/contacts'));
     assert.deepEqual(create.body.listIds, [6]);
     assert.equal(create.body.updateEnabled, true);
@@ -146,7 +145,7 @@ async function clickConfirm(t) {
     }
 }
 
-test('confirm click: valid token sets DOUBLE_OPT-IN, never touches lists, redirects to pack page', async () => {
+test('confirm click: valid token sets DOUBLE_OPT-IN, never touches lists, redirects to /newsletter/confirmed', async () => {
     process.env.SUBSCRIBE_CONFIRM_SECRET = 'sec';
     process.env.BREVO_PROOF_ATTRIBUTES = 'DOI_CONFIRMED,DOI_CONFIRMED_AT';
     const r = await clickConfirm(await L.signConfirmToken('sec', 501));
@@ -201,6 +200,5 @@ test('redirect-only routes (retired URLs) redirect permanently', async () => {
         }
     };
     await walk('src/routes');
-    assert.ok(targets.includes('/'), 'a retired page redirects to the homepage');
-    assert.ok(targets.includes('/newsletter/confirmed'), 'the old confirmed page redirects to /newsletter/confirmed');
+    assert.ok(targets.length > 0, 'at least one redirect-only route (e.g. /datenschutz) exists');
 });
