@@ -16,6 +16,10 @@ npm run dev -- --open
 
 This app is hosted via Vercel at [pitchgrid.io](https://pitchgrid.io). Deploy by pushing to the main branch or using the Vercel CLI.
 
+## Price and trial wording
+
+`src/lib/shop/pricing.ts` is the only place with the price (`PRICE_AMOUNT`) and trial length. All CTAs, `/buy` and `/download` read from it. The real price is set in Moonbase; change both together.
+
 ## Acknowledgements
 
 I am using the magical SvelteKit, thank you Rich Harris! 
