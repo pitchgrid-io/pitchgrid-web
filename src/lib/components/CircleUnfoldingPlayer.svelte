@@ -1,11 +1,11 @@
 <!--
 	Circle-of-fifths "unfolding" animation with a hover/tap stepper.
 	Ported from pitchgrid-io/pg-animations (svelte-app/src/routes/circle-unfolding).
-	Replaces /pitchgrid-anim-web.mp4 on the landing page.
+	Replaces the former explainer video on the landing page; timing matches it frame by frame.
 -->
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { STEPS, REST_TIMES, TOTAL, stateAt, restIndexAt, inTransition } from '$lib/circle-unfolding/timeline';
+	import { STEPS, DURATIONS, REST_TIMES, TOTAL, stateAt, restIndexAt, inTransition } from '$lib/circle-unfolding/timeline';
 	import {
 		bakedFor, circlePositions, arcPath, isExtra, keyboardPaths,
 		LINE_X, PG_YELLOW, LIGHT
@@ -48,7 +48,7 @@
 		if (!inTransition(time) && time !== target) {
 			const i = restIndexAt(time);
 			if (direction > 0 && i + 1 <= LAST && REST_TIMES[i + 1] <= target + 1e-6) {
-				time = Math.max(time, REST_TIMES[i + 1] - STEPS[i + 1].duration);
+				time = Math.max(time, REST_TIMES[i + 1] - DURATIONS[i + 1]);
 			} else if (direction < 0) {
 				time = Math.min(time, REST_TIMES[i]);
 			}
@@ -165,7 +165,8 @@
 	on:blur={onBlur}
 >
 	<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-	<svg viewBox="-660 -540 1320 1320" class="cu-stage" on:pointerup={onStageClick} aria-hidden="true">
+	<div class="cu-frame">
+	<svg viewBox="-660 -511 1320 1320" class="cu-stage" on:pointerup={onStageClick} aria-hidden="true">
 		<g opacity={s.contentAlpha}>
 			<path d={arc} fill="none" stroke={LIGHT} stroke-width="6" stroke-linecap="round" />
 			{#if s.labelSeparation > 0.01}
@@ -257,11 +258,10 @@
 			{#each LOGO_PATHS as p}<path d={p.d} fill={p.fill} />{/each}
 		</g>
 	</svg>
+	</div>
 
 	<div class="cu-overlay" aria-live="polite">
-		{#if engaged}
-			<p class="cu-text">{STEPS[currentIdx].text}</p>
-		{/if}
+		<p class="cu-text">{engaged ? STEPS[currentIdx].text : ''}</p>
 		<div class="cu-controls">
 			<button type="button" class="cu-btn" aria-label="Previous step" on:click|stopPropagation={prev} on:pointerup|stopPropagation>
 				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7" /></svg>
@@ -294,16 +294,19 @@
 	.cu-player {
 		position: relative;
 		width: 100%;
+		outline: none;
+		touch-action: manipulation;
+		-webkit-tap-highlight-color: transparent;
+	}
+	.cu-frame {
+		width: 100%;
 		aspect-ratio: 1 / 1;
 		background: #1a1a1a;
 		border-radius: 12px;
 		overflow: hidden;
 		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 171, 0, 0.1);
-		outline: none;
-		touch-action: manipulation;
-		-webkit-tap-highlight-color: transparent;
 	}
-	.cu-player:focus-visible { box-shadow: 0 0 0 2px #ffab00, 0 12px 40px rgba(0, 0, 0, 0.5); }
+	.cu-player:focus-visible .cu-frame { box-shadow: 0 0 0 2px #ffab00, 0 12px 40px rgba(0, 0, 0, 0.5); }
 	.cu-stage { display: block; width: 100%; height: 100%; cursor: default; }
 	.lbl {
 		font-family: monospace;
@@ -312,20 +315,18 @@
 		text-anchor: middle;
 		pointer-events: none;
 	}
+	/* Controls sit below the animation; their space is always reserved so the page never jumps. */
 	.cu-overlay {
-		position: absolute;
-		left: 0; right: 0; bottom: 0;
-		padding: 2.5rem 1rem 0.75rem;
-		background: linear-gradient(to top, rgba(10, 10, 14, 0.92) 55%, rgba(10, 10, 14, 0));
+		padding: 0.75rem 0.25rem 0;
 		opacity: 0;
-		transform: translateY(8px);
-		transition: opacity 0.2s ease, transform 0.2s ease;
-		pointer-events: none;
+		visibility: hidden;
+		transition: opacity 0.2s ease, visibility 0.2s;
 	}
-	.engaged .cu-overlay { opacity: 1; transform: none; pointer-events: auto; }
+	.engaged .cu-overlay { opacity: 1; visibility: visible; }
 	.cu-text {
 		margin: 0 0 0.6rem;
-		min-height: 2.6em;
+		min-height: 3.9em; /* three lines reserved */
+		display: flex; align-items: center; justify-content: center;
 		color: #f2f2f2;
 		font-size: 1rem;
 		line-height: 1.3;
@@ -370,7 +371,7 @@
 		pointer-events: none;
 	}
 	@media (max-width: 520px) {
-		.cu-overlay { padding: 2rem 0.5rem 0.5rem; }
+		.cu-overlay { padding: 0.6rem 0 0; }
 		.cu-text { font-size: 0.85rem; }
 		.cu-btn { width: 32px; height: 32px; }
 		.cu-controls { gap: 0.35rem; }
