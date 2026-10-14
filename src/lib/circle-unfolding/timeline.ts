@@ -52,7 +52,7 @@ export const STEPS: Step[] = [
 	{ text: 'Here\'s The foundation of music theory:\nThe Piano Keyboard and the circle of 5ths', duration: 1000, hold: 1700, state: { logoProgress: 1, contentAlpha: 1 } },
 	{ text: 'But the notes on the circle can have multiple names:\n Enharmonic pairs', duration: 550, hold: 400, state: { labelSeparation: 1 } },
 	{ text: 'To unlock the hidden dimension,\n we open up the circle to the spiral that it really is...', duration: 550, hold: 0, state: { b: 10, labelSeparation: 0 } },
-	{ text: '... and unfold it to a line, with the notes rising by 5ths.\n Two dimensions: Piano~Pitch, Line~Foundational harmonic rules', duration: 1200, hold: 700, state: { t: 1, b: 0 } },
+	{ text: '... and unfold it to a line, with the notes rising by 5ths.\n Two dimensions: Piano ~ Pitch, Line ~ the stack of fifths that builds the scale', duration: 1200, hold: 700, state: { t: 1, b: 0 } },
 	{ text: 'let\'s see what happens if we line up the notes in a 2D grid', duration: 550, hold: 150, state: { gridAlpha: 1 } },
 	{ text: 'Here are our scale degrees', duration: 650, hold: 600, state: { equaveOnScale: 1 } },
 	{ text: 'Connecting the dots... The scale is represented by a zig-zag line.\nOne direction: large steps; Other direction: small steps', duration: 450, hold: 600, state: { gridAlpha: 0, segmentsAlpha: 1 } },
