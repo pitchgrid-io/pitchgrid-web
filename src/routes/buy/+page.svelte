@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { MOONBASE_BUY_URL, moonbaseBuyUrl } from '$lib/shop/moonbase';
-    import { PRICE_LABEL_ALL, PRICE_NOTE, TRIAL_DAYS } from '$lib/shop/pricing';
+    import { MOONBASE_BUY_URL } from '$lib/shop/moonbase';
+    import { PRICE_LABEL_ALL, TRIAL_DAYS } from '$lib/shop/pricing';
 
     // Pre-checkout page. 32 of 39 abandoned Moonbase checkouts left on step 1
     // without entering anything, and 19 of 39 arrived via bare deep links, so
@@ -19,15 +18,6 @@
     const MOONBASE_RESET_URL = 'https://pitchgrid.moonbase.sh/forgot-password';
     const MOONBASE_BUYER_TERMS_URL =
         'https://help.moonbase.sh/articles/3131239-general-terms-and-conditions-for-buyers';
-
-    // This page is prerendered, so the query string is only known in the browser.
-    // utm_* params (e.g. /buy?utm_source=newsletter) are forwarded to Moonbase,
-    // which records them on the order. Without JS the plain checkout URL works.
-    let checkoutUrl = MOONBASE_BUY_URL;
-
-    onMount(() => {
-        checkoutUrl = moonbaseBuyUrl(window.location.search);
-    });
 </script>
 
 <svelte:head>
@@ -53,9 +43,8 @@
         <p class="price">{PRICE_LABEL_ALL}</p>
         <p class="currency">Same amount in EUR, USD or GBP. Checkout shows the currency for your country.</p>
         <p class="lead">One-time payment. Perpetual license, not a subscription.</p>
-        {#if PRICE_NOTE}<p class="price-note">{PRICE_NOTE}</p>{/if}
 
-        <a class="buy-cta" href={checkoutUrl} data-plausible-label="Continue to checkout">Continue to checkout</a>
+        <a class="buy-cta" href={MOONBASE_BUY_URL} data-plausible-label="Continue to checkout">Continue to checkout</a>
 
         <p class="trial">
             Not sure yet? The {TRIAL_DAYS}-day free trial is built into the installer, no card needed.
@@ -159,11 +148,6 @@
         font-size: 1.1rem;
         line-height: 1.5;
         margin: 0 auto 0.5rem;
-    }
-    .price-note {
-        color: #ffab00;
-        font-size: 0.95rem;
-        margin: 0 auto 1.5rem;
     }
     .buy-cta {
         display: inline-block;

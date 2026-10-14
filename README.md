@@ -31,7 +31,7 @@ Without `BREVO_API_KEY`, `/api/subscribe` answers 503 and the forms show a frien
 
 ## Price and trial wording
 
-`src/lib/shop/pricing.ts` is the only place with the price (`PRICE_AMOUNT`) and trial length. All CTAs, `/buy` and `/download` read from it. The real price is set in Moonbase; change both together. `PRICE_NOTE` (empty by default) adds a one-line note under the buy buttons, e.g. ahead of a price change.
+`src/lib/shop/pricing.ts` is the only place with the price (`PRICE_AMOUNT`) and trial length. All CTAs, `/buy` and `/download` read from it. The real price is set in Moonbase; change both together.
 
 ## Mailing list (signup)
 
@@ -41,21 +41,7 @@ Attributes written (all exist in Brevo): `SIGNUP_SOURCE` (`web:footer`, …), `O
 
 Optional confirmation email (measurement only): with `SUBSCRIBE_CONFIRM_EMAIL=true`, `BREVO_CONFIRM_TEMPLATE_ID` and `SUBSCRIBE_CONFIRM_SECRET` set, new or unconfirmed contacts get a transactional email whose link `/api/subscribe/confirm?t=<HMAC token with the contact id>` sets Brevo's `DOUBLE_OPT-IN=Yes` (plus `DOI_CONFIRMED=true` / `DOI_CONFIRMED_AT` when listed) and redirects to `/newsletter/confirmed?via=email` (invalid or expired links go to the homepage). List membership never depends on the click. Mail scanners may open links automatically, so read click rates as an upper bound.
 
-Retired page URLs redirect permanently (308) to `/` and `/newsletter/confirmed`, same mechanism as `/datenschutz`: a route with only a `+page.ts` whose load calls `redirect()`.
-
 Tests: `npm run test:subscribe`.
-
-## Campaign links (UTM)
-
-Tag every link in a newsletter, video description or post, e.g.
-
-```
-https://pitchgrid.io/?utm_source=newsletter&utm_medium=email&utm_campaign=2026-10
-https://pitchgrid.io/download?utm_source=youtube&utm_medium=video&utm_campaign=move-demo
-https://pitchgrid.io/buy?utm_source=newsletter&utm_medium=email&utm_campaign=2026-10
-```
-
-`utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content` and `utm_referrer` are carried from the landing page onto the Try/Buy buttons (no cookies or storage) and the "Continue to checkout" button on `/buy` (a pre-checkout page, no auto-forward) passes them to the Moonbase checkout, which records them on each order and can run UTM-only discounts. Plausible shows the same params on page views.
 
 ## Acknowledgements
 

@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { PRICE_LABEL, PRICE_LABEL_ALL, PRICE_NOTE, TRIAL_DAYS } from '$lib/shop/pricing';
-	import { carryUtm } from '$lib/actions/carryUtm';
+	import { PRICE_LABEL, PRICE_LABEL_ALL, TRIAL_DAYS } from '$lib/shop/pricing';
 </script>
 
 <style>
@@ -691,14 +689,14 @@
 		</p>
 		<p class="hero-bridge">Explore this interactively with the <em>PitchGrid Plugin</em></p>
 		<div class="hero-cta-group">
-			<a href="/download" class="hero-cta" use:carryUtm={$page.url.search} data-plausible-label="Trial Download">Try free for {TRIAL_DAYS} days</a>
-			<a href="/buy" class="hero-cta-secondary" use:carryUtm={$page.url.search} data-plausible-label="Buy PitchGrid">Buy {PRICE_LABEL} — one-time license</a>
+			<a href="/download" class="hero-cta" data-plausible-label="Trial Download">Try free for {TRIAL_DAYS} days</a>
+			<a href="/buy" class="hero-cta-secondary" data-plausible-label="Buy PitchGrid">Buy {PRICE_LABEL} — one-time license</a>
 		</div>
 		<p class="hero-fineprint">
 			VST3 · AU · CLAP Note Effect for macOS &amp; Windows · full features in the trial, no card ·
 			{PRICE_LABEL_ALL} perpetual license ·
 			<a href="https://github.com/pitchgrid-io/pitchgrid-mapper/releases" target="_blank" rel="noopener" data-plausible-label="Download Mapper">PitchGrid Mapper is free</a>
-			{#if PRICE_NOTE}<br />{PRICE_NOTE}{/if}
+			
 		</p>
 		<div class="hero-screenshot">
 			<video autoplay muted loop playsinline disablepictureinpicture
@@ -787,7 +785,7 @@
 					Modes, transposition, chord relationships: they all still work. 
 					Maps to the piano keyboard and DAW piano roll — bridging new tunings with your existing tools.
 				</p>
-				<a href="/download" class="btn" use:carryUtm={$page.url.search} data-plausible-label="Get the Plugin">Get the Plugin</a>
+				<a href="/download" class="btn" data-plausible-label="Get the Plugin">Get the Plugin</a>
 				<a href="/info/plugin-user-manual" class="btn btn-secondary">User Manual</a>
 			</div>
 			
@@ -885,7 +883,7 @@
 			</div>
 		</div>
 		<p class="trial-reassure">
-			Not sure yet? <a href="/download" use:carryUtm={$page.url.search} data-plausible-label="Trial Download">Try it free for {TRIAL_DAYS} days</a>,
+			Not sure yet? <a href="/download" data-plausible-label="Trial Download">Try it free for {TRIAL_DAYS} days</a>,
 			with full features and no card.
 		</p>
 	</section>
@@ -907,7 +905,7 @@
 			<p>
 				<strong>The next chapter of tonal music is waiting to be written. Maybe you'll write it.</strong>
 			</p>
-			<a href="/download" class="hero-cta" use:carryUtm={$page.url.search} data-plausible-label="Start Exploring">Start Exploring</a>
+			<a href="/download" class="hero-cta" data-plausible-label="Start Exploring">Start Exploring</a>
 		</div>
 	</section>
 
@@ -1213,12 +1211,12 @@
 			Load PitchGrid in front of your favourite synth, pick a preset, turn the knobs.
 		</p>
 		<div class="hero-cta-group">
-			<a href="/download" class="hero-cta" use:carryUtm={$page.url.search} data-plausible-label="Trial Download">Try free for {TRIAL_DAYS} days</a>
-			<a href="/buy" class="hero-cta-secondary" use:carryUtm={$page.url.search} data-plausible-label="Buy PitchGrid">Buy {PRICE_LABEL} — one-time license</a>
+			<a href="/download" class="hero-cta" data-plausible-label="Trial Download">Try free for {TRIAL_DAYS} days</a>
+			<a href="/buy" class="hero-cta-secondary" data-plausible-label="Buy PitchGrid">Buy {PRICE_LABEL} — one-time license</a>
 		</div>
 		<p class="hero-fineprint">
 			macOS &amp; Windows · VST3 · AU · CLAP · full features in the trial, no card
-			{#if PRICE_NOTE}<br />{PRICE_NOTE}{/if}
+			
 		</p>
 	</section>
 

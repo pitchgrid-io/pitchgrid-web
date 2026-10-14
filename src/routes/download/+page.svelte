@@ -1,8 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import { page } from '$app/stores';
-    import { PRICE_LABEL, PRICE_LABEL_ALL, PRICE_NOTE, TRIAL_DAYS } from '$lib/shop/pricing';
-    import { carryUtm } from '$lib/actions/carryUtm';
+    import { PRICE_LABEL, PRICE_LABEL_ALL, TRIAL_DAYS } from '$lib/shop/pricing';
 
     export let data: PageData;
 
@@ -73,8 +71,7 @@
             </ul>
         </div>
         <p class="like-it">Like it?</p>
-        <a class="buy-cta" href="/buy" use:carryUtm={$page.url.search} data-plausible-label="Get a license">Buy a license — {PRICE_LABEL}, one-time</a>
-        {#if PRICE_NOTE}<p class="price-note">{PRICE_NOTE}</p>{/if}
+        <a class="buy-cta" href="/buy" data-plausible-label="Get a license">Buy a license — {PRICE_LABEL}, one-time</a>
         <p class="indiekey">
             Existing Indiekey customers: sign in with the email on the old license.
             Set a password via <a href="https://pitchgrid.moonbase.sh/forgot-password">Forgot password</a> if you have not used Moonbase.
@@ -203,11 +200,6 @@
         font-family: Rubik, system-ui, sans-serif;
         font-size: 1.15rem;
         color: #f1f2f4;
-    }
-    .price-note {
-        margin: 0.75rem auto 0;
-        color: #f1f2f4a0;
-        font-size: 0.9rem;
     }
     .buy-cta {
         display: inline-block;
